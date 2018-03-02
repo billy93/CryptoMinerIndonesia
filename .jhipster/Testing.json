@@ -1,0 +1,33 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "image",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image",
+            "fieldValidateRules": [
+                "required",
+                "minbytes",
+                "maxbytes"
+            ],
+            "fieldValidateRulesMinbytes": "10000",
+            "fieldValidateRulesMaxbytes": 5000000
+        },
+        {
+            "fieldName": "agreement",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "file",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
+        }
+    ],
+    "changelogDate": "20180202102556",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "testing",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

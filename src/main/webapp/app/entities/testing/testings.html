@@ -1,0 +1,68 @@
+<div>
+    <h2>Testings</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="testing.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span >
+                        Create new Testing
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr>
+                    <th><span>ID</span></th>
+                    <th><span>Image</span></th>
+                    <th><span>Agreement</span></th>
+                    <th><span>File</span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="testing in vm.testings track by testing.id">
+                    <td><a ui-sref="testing-detail({id:testing.id})">{{testing.id}}</a></td>
+                    <td>
+                        <a ng-if="testing.image" ng-click="vm.openFile(testing.imageContentType, testing.image)">
+                            <img data-ng-src="{{'data:' + testing.imageContentType + ';base64,' + testing.image}}" style="max-height: 30px;" alt="testing image"/>
+                        </a>
+                        <span ng-if="testing.image">{{testing.imageContentType}}, {{vm.byteSize(testing.image)}}</span>
+                    </td>
+                    <td>{{testing.agreement}}</td>
+                    <td>
+                        <a ng-if="testing.file" ng-click="vm.openFile(testing.fileContentType, testing.file)">open</a>
+                        <span ng-if="testing.file">{{testing.fileContentType}}, {{vm.byteSize(testing.file)}}</span>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="testing-detail({id:testing.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="testing.edit({id:testing.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="testing.delete({id:testing.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

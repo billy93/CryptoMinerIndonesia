@@ -1,0 +1,36 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "username",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "amount",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "TransactionType",
+            "fieldValues": "DEPOSIT, WITHDRAW"
+        },
+        {
+            "fieldName": "fromUsername",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "txid",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180213134808",
+    "dto": "no",
+    "service": "serviceClass",
+    "entityTableName": "wallet_usd_transaction",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}

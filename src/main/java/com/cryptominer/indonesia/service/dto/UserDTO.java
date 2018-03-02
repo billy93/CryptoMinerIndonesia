@@ -8,6 +8,8 @@ import com.cryptominer.indonesia.domain.User;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.persistence.Column;
+import javax.persistence.Lob;
 import javax.validation.constraints.*;
 import java.time.Instant;
 import java.util.Set;
@@ -39,6 +41,7 @@ public class UserDTO {
     private String imageUrl;
 
     private boolean activated = false;
+    private boolean agreement = false;
 
     @Size(min = 2, max = 6)
     private String langKey;
@@ -53,6 +56,76 @@ public class UserDTO {
 
     private Set<String> authorities;
 
+    private String identityNumber;
+    
+    private String btcWallet;
+    
+    private String bank;
+    
+    private String accountNumber;
+    
+    @Lob
+    private byte[] ktp;
+
+    @Lob
+    private byte[] photo;
+
+    private String ktpContentType;
+
+    private String photoContentType;
+    
+    public String getIdentityNumber() {
+		return identityNumber;
+	}
+
+	public void setIdentityNumber(String identityNumber) {
+		this.identityNumber = identityNumber;
+	}
+
+	public String getBtcWallet() {
+		return btcWallet;
+	}
+
+	public void setBtcWallet(String btcWallet) {
+		this.btcWallet = btcWallet;
+	}
+
+	public String getBank() {
+		return bank;
+	}
+
+	public void setBank(String bank) {
+		this.bank = bank;
+	}
+
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+
+	public boolean isAgreement() {
+		return agreement;
+	}
+
+	public void setAgreement(boolean agreement) {
+		this.agreement = agreement;
+	}
+
+
+	private String phoneNumber;
+    
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -179,7 +252,39 @@ public class UserDTO {
         this.authorities = authorities;
     }
 
-    @Override
+    public byte[] getKtp() {
+		return ktp;
+	}
+
+	public void setKtp(byte[] ktp) {
+		this.ktp = ktp;
+	}
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	public String getKtpContentType() {
+		return ktpContentType;
+	}
+
+	public void setKtpContentType(String ktpContentType) {
+		this.ktpContentType = ktpContentType;
+	}
+
+	public String getPhotoContentType() {
+		return photoContentType;
+	}
+
+	public void setPhotoContentType(String photoContentType) {
+		this.photoContentType = photoContentType;
+	}
+
+	@Override
     public String toString() {
         return "UserDTO{" +
             "login='" + login + '\'' +

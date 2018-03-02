@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="#{email.activation.title}">JHipster creation</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    </head>
+    <body>
+        <p th:text="#{email.deactivate.greeting(${user.login})}">
+            Dear
+        </p>
+        <p th:text="#{email.deactivate.text1}">
+            Your JHipster account has been deactivate
+        </p>
+        <p>
+            <span th:text="#{email.deactivate.text2}">Regards, </span>
+            <br/>
+            <em th:text="#{email.signature}">JHipster.</em>
+        </p>
+    </body>
+</html>

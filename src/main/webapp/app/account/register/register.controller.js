@@ -6,9 +6,9 @@
         .controller('RegisterController', RegisterController);
 
 
-    RegisterController.$inject = [ '$timeout', 'Auth', 'LoginService', 'errorConstants'];
+    RegisterController.$inject = [ '$timeout', '$scope', 'Auth', 'LoginService', 'errorConstants', 'DataUtils'];
 
-    function RegisterController ($timeout, Auth, LoginService, errorConstants) {
+    function RegisterController ($timeout, $scope, Auth, LoginService, errorConstants, DataUtils) {
         var vm = this;
 
         vm.doNotMatch = null;
@@ -18,7 +18,8 @@
         vm.register = register;
         vm.registerAccount = {};
         vm.success = null;
-
+        vm.pattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]/;
+        
         $timeout(function (){angular.element('#login').focus();});
 
         function register () {
@@ -45,5 +46,25 @@
                 });
             }
         }
+        
+        vm.setImage = function ($file, registerAccount, type) {
+            if ($file && $file.$error === 'pattern') {
+                return;
+            }
+            if ($file) {
+                DataUtils.toBase64($file, function(base64Data) {
+                    $scope.$apply(function() {
+                    	     if(type=='ktp'){
+                    	          registerAccount.ktp = base64Data;
+                              registerAccount.ktpContentType = $file.type;
+                    	     }
+                    	     else if(type=='photo'){
+                    	    	      registerAccount.photo = base64Data;
+                               registerAccount.photoContentType = $file.type;
+                    	     }
+                    });
+                });
+            }
+        };
     }
 })();

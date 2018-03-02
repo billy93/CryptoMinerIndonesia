@@ -82,6 +82,22 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "reset_date")
     private Instant resetDate = null;
 
+    @Size(min = 10000, max = 5000000)
+    @Lob
+    @Column(name = "ktp")
+    private byte[] ktp;
+    
+    @Size(min = 10000, max = 5000000)
+    @Lob
+    @Column(name = "photo")
+    private byte[] photo;
+
+    @Column(name = "ktp_content_type")
+    private String ktpContentType;
+
+    @Column(name = "photo_content_type")
+    private String photoContentType;
+    
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -92,7 +108,104 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
 
-    public Long getId() {
+    @NotNull
+    @Column(name="identity_number", nullable = false, unique = true)
+    private String identityNumber;
+    
+    @NotNull
+    @Column(name="btc_wallet", nullable = false, unique = true)
+    private String btcWallet;
+    
+    @NotNull
+    @Column(name="bank",nullable = false)
+    private String bank;
+
+    @NotNull
+    @Column(name="account_number",nullable = false)
+    private String accountNumber;
+    
+    @NotNull
+    @Column(name="phone_number",nullable = false)
+    private String phoneNumber;
+    
+    @NotNull
+    @Column(nullable = false)
+    private boolean agreement = false;
+
+    
+    public byte[] getKtp() {
+		return ktp;
+	}
+
+	public void setKtp(byte[] ktp) {
+		this.ktp = ktp;
+	}
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	public String getKtpContentType() {
+		return ktpContentType;
+	}
+
+	public void setKtpContentType(String ktpContentType) {
+		this.ktpContentType = ktpContentType;
+	}
+
+	public String getPhotoContentType() {
+		return photoContentType;
+	}
+
+	public void setPhotoContentType(String photoContentType) {
+		this.photoContentType = photoContentType;
+	}
+
+	public String getIdentityNumber() {
+		return identityNumber;
+	}
+
+	public void setIdentityNumber(String identityNumber) {
+		this.identityNumber = identityNumber;
+	}
+
+	public String getBtcWallet() {
+		return btcWallet;
+	}
+
+	public void setBtcWallet(String btcWallet) {
+		this.btcWallet = btcWallet;
+	}
+
+	public String getBank() {
+		return bank;
+	}
+
+	public void setBank(String bank) {
+		this.bank = bank;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public boolean isAgreement() {
+		return agreement;
+	}
+
+	public void setAgreement(boolean agreement) {
+		this.agreement = agreement;
+	}
+
+	public Long getId() {
         return id;
     }
 
@@ -197,7 +310,15 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.authorities = authorities;
     }
 
-    @Override
+    public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

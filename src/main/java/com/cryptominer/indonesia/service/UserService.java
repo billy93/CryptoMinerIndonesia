@@ -39,10 +39,13 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
+    private final MailService mailService;
+    
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, MailService mailService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.mailService = mailService;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -81,7 +84,6 @@ public class UserService {
     }
 
     public User registerUser(UserDTO userDTO, String password) {
-
         User newUser = new User();
         Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
         Set<Authority> authorities = new HashSet<>();
@@ -100,6 +102,18 @@ public class UserService {
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         authorities.add(authority);
         newUser.setAuthorities(authorities);
+        
+        newUser.setIdentityNumber(userDTO.getIdentityNumber());
+        newUser.setAgreement(true);
+        newUser.setBank(userDTO.getBank());
+        newUser.setBtcWallet(userDTO.getBtcWallet());
+        newUser.setPhoneNumber(userDTO.getPhoneNumber());
+        newUser.setAccountNumber(userDTO.getAccountNumber());
+        newUser.setPhoto(userDTO.getPhoto());
+        newUser.setPhotoContentType(userDTO.getPhotoContentType());
+        newUser.setPhoneNumber(userDTO.getPhoneNumber());
+        newUser.setKtp(userDTO.getKtp());
+        newUser.setKtpContentType(userDTO.getKtpContentType());
         userRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
@@ -171,6 +185,13 @@ public class UserService {
                 user.setEmail(userDTO.getEmail());
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
+
+                if(userDTO.isActivated()) {
+                		mailService.sendCreationEmail(user);
+                }
+                else {
+                		mailService.sendDeactivateEmail(user);
+                }
                 user.setLangKey(userDTO.getLangKey());
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
@@ -201,8 +222,8 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
+    public Page<User> getAllManagedUsers(Pageable pageable) {
+        return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER);
     }
 
     @Transactional(readOnly = true)

@@ -1,0 +1,28 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "username",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "amount",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "startDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "endDate",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "changelogDate": "20180226125642",
+    "dto": "no",
+    "service": "serviceClass",
+    "entityTableName": "package_cmi",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}

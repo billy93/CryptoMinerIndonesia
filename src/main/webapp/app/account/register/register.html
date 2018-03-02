@@ -70,12 +70,148 @@
                                ng-show="form.email.$error.maxlength">
                             Your email cannot be longer than 100 characters.
                         </p>
+                        
+                        
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="control-label" for="phoneNumber">Phone Number</label>
+                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Your phone number"
+                           ng-model="vm.registerAccount.phoneNumber" required>
+                    <div ng-show="form.phoneNumber.$dirty && form.phoneNumber.$invalid">
+                        <p class="help-block"
+                               ng-show="form.phoneNumber.$error.required">
+                            Your phone number is required.
+                        </p>
+                    </div>
+                </div>
+                
+                 <div class="form-group">
+                    <label class="control-label" for="identityNumber">Identity Number</label>
+                    <input type="text" class="form-control" id="identityNumber" name="identityNumber" placeholder="Your KTP"
+                           ng-model="vm.registerAccount.identityNumber" required>
+                    <div ng-show="form.identityNumber.$dirty && form.identityNumber.$invalid">
+                        <p class="help-block"
+                               ng-show="form.identityNumber.$error.required">
+                            Your KTP Number is required.
+                        </p>
+                    </div>
+                </div>
+                
+                 <div class="form-group">
+                    <label class="control-label" for="btcWallet">BTC Wallet</label>
+                    <input type="text" class="form-control" id="btcWallet" name="btcWallet" placeholder="Your BTC Wallet Address"
+                           ng-model="vm.registerAccount.btcWallet" required>
+                    <div ng-show="form.btcWallet.$dirty && form.btcWallet.$invalid">
+                        <p class="help-block"
+                               ng-show="form.btcWallet.$error.required">
+                            Your BTC Wallet is required.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="control-label" for="accountNumber">Account number</label>
+                    <input type="text" class="form-control" id="accountNumber" name="accountNumber" placeholder="Your Account Number"
+                           ng-model="vm.registerAccount.accountNumber" required>
+                    <div ng-show="form.accountNumber.$dirty && form.accountNumber.$invalid">
+                        <p class="help-block"
+                               ng-show="form.accountNumber.$error.required">
+                            Your Account Number is required.
+                        </p>
+                    </div>
+                </div>
+                
+                 <div class="form-group">
+                    <label class="control-label" for="bank">Bank</label>
+                    <input type="text" class="form-control" id="bank" name="bank" placeholder="Your Bank Name"
+                           ng-model="vm.registerAccount.bank" required>
+                    <div ng-show="form.bank.$dirty && form.bank.$invalid">
+                        <p class="help-block"
+                               ng-show="form.bank.$error.required">
+                            Your Bank Name is required.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="form-group" ngf-drop ngf-change="vm.setImage($file, vm.registerAccount, 'ktp')" ngf-pattern="'image/*'">
+		            <label class="control-label" for="field_ktp">KTP</label>
+		            <div>
+		                <img data-ng-src="{{'data:' + vm.registerAccount.ktpContentType + ';base64,' + vm.registerAccount.ktp}}" style="max-height: 100px;" ng-if="vm.registerAccount.ktp" alt="KTP image"/>
+		                <div ng-if="vm.registerAccount.ktp" class="help-block clearfix">
+		                    <span class="pull-left">{{vm.registerAccount.ktpContentType}}, {{vm.byteSize(vm.registerAccount.ktp)}}</span>
+		                    <button type="button" ng-click="vm.registerAccount.ktp=null;vm.registerAccount.ktpContentType=null;"
+		                            class="btn btn-default btn-xs pull-right">
+		                        <span class="glyphicon glyphicon-remove"></span>
+		                    </button>
+		                </div>
+		                <button type="button" ngf-select class="btn btn-default btn-block"
+		                        ngf-change="vm.setImage($file, vm.registerAccount, 'ktp')" accept="image/*">
+		                    Add ktp
+		                </button>
+		            </div>
+		            <input type="hidden" class="form-control" name="ktp" id="field_ktp"
+		                    ng-model="vm.registerAccount.ktp"
+		                    required minbytes="10000" maxbytes="5000000"/>
+		            <input type="hidden" class="form-control" name="ktpContentType" id="field_ktpContentType"
+		                    ng-model="vm.registerAccount.ktpContentType" />
+		            <div ng-show="editForm.ktp.$invalid">
+		                <p class="help-block"
+		                    ng-show="editForm.ktp.$error.required">
+		                    This field is required.
+		                </p>
+		                <p class="help-block"
+		                   ng-show="editForm.ktp.$error.minbytes" translate-value-min="10000">
+		                    This field should be at least 10000.
+		                </p>
+		                <p class="help-block"
+		                   ng-show="editForm.ktp.$error.maxbytes">
+		                    This field cannot be more than 5000000.
+		                </p>
+		            </div>
+		        </div>
+		        
+		        <div class="form-group" ngf-drop ngf-change="vm.setImage($file, vm.registerAccount, 'photo')" ngf-pattern="'image/*'">
+		            <label class="control-label" for="field_photo">Photo</label>
+		            <div>
+		                <img data-ng-src="{{'data:' + vm.registerAccount.photoContentType + ';base64,' + vm.registerAccount.photo}}" style="max-height: 100px;" ng-if="vm.registerAccount.ktp" alt="KTP image"/>
+		                <div ng-if="vm.registerAccount.photo" class="help-block clearfix">
+		                    <span class="pull-left">{{vm.registerAccount.photoContentType}}, {{vm.byteSize(vm.registerAccount.photo)}}</span>
+		                    <button type="button" ng-click="vm.registerAccount.photo=null;vm.registerAccount.photoContentType=null;"
+		                            class="btn btn-default btn-xs pull-right">
+		                        <span class="glyphicon glyphicon-remove"></span>
+		                    </button>
+		                </div>
+		                <button type="button" ngf-select class="btn btn-default btn-block"
+		                        ngf-change="vm.setImage($file, vm.registerAccount, 'photo')" accept="image/*">
+		                    Add photo
+		                </button>
+		            </div>
+		            <input type="hidden" class="form-control" name="photo" id="field_photo"
+		                    ng-model="vm.registerAccount.photo"
+		                    required minbytes="10000" maxbytes="5000000"/>
+		            <input type="hidden" class="form-control" name="photoContentType" id="field_photoContentType"
+		                    ng-model="vm.registerAccount.photoContentType" />
+		            <div ng-show="editForm.photo.$invalid">
+		                <p class="help-block"
+		                    ng-show="editForm.photo.$error.required">
+		                    This field is required.
+		                </p>
+		                <p class="help-block"
+		                   ng-show="editForm.photo.$error.minbytes" translate-value-min="10000">
+		                    This field should be at least 10000.
+		                </p>
+		                <p class="help-block"
+		                   ng-show="editForm.photo.$error.maxbytes">
+		                    This field cannot be more than 5000000.
+		                </p>
+		            </div>
+		        </div>
+		        
+                <div class="form-group">
                     <label class="control-label" for="password">New password</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="New password"
-                           ng-model="vm.registerAccount.password" ng-minlength=4 ng-maxlength=50 required>
+                           ng-model="vm.registerAccount.password" ng-minlength=4 ng-maxlength=50 required ng-pattern="vm.pattern">
                     <div ng-show="form.password.$dirty && form.password.$invalid">
                         <p class="help-block"
                                ng-show="form.password.$error.required">
@@ -88,6 +224,10 @@
                         <p class="help-block"
                                ng-show="form.password.$error.maxlength">
                             Your password cannot be longer than 50 characters.
+                        </p>
+                        <p class="help-block"
+                               ng-show="form.password.$error.pattern">
+                            Your password should contain number, lowercase, uppercase and special character
                         </p>
                     </div>
                     <password-strength-bar password-to-check="vm.registerAccount.password"></password-strength-bar>
@@ -111,7 +251,7 @@
                         </p>
                     </div>
                 </div>
-
+		        
                 <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary">Register</button>
             </form>
             <p></p>

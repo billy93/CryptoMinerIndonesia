@@ -153,7 +153,7 @@ public class UserServiceIntTest {
             userRepository.saveAndFlush(user);
         }
         final PageRequest pageable = new PageRequest(0, (int) userRepository.count());
-        final Page<UserDTO> allManagedUsers = userService.getAllManagedUsers(pageable);
+        final Page<User> allManagedUsers = userService.getAllManagedUsers(pageable);
         assertThat(allManagedUsers.getContent().stream()
             .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
             .isTrue();

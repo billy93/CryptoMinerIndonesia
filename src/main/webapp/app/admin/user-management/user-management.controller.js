@@ -5,9 +5,9 @@
         .module('cryptoMinerIndonesiaApp')
         .controller('UserManagementController', UserManagementController);
 
-    UserManagementController.$inject = ['Principal', 'User', 'ParseLinks', 'AlertService', '$state', 'pagingParams', 'paginationConstants'];
+    UserManagementController.$inject = ['DataUtils', 'Principal', 'User', 'ParseLinks', 'AlertService', '$state', 'pagingParams', 'paginationConstants'];
 
-    function UserManagementController(Principal, User, ParseLinks, AlertService, $state, pagingParams, paginationConstants) {
+    function UserManagementController(DataUtils, Principal, User, ParseLinks, AlertService, $state, pagingParams, paginationConstants) {
         var vm = this;
 
         vm.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
@@ -26,6 +26,8 @@
         vm.itemsPerPage = paginationConstants.itemsPerPage;
         vm.transition = transition;
 
+        vm.openFile = DataUtils.openFile;
+        vm.byteSize = DataUtils.byteSize;
         vm.loadAll();
         Principal.identity().then(function(account) {
             vm.currentAccount = account;
@@ -53,6 +55,8 @@
             vm.queryCount = vm.totalItems;
             vm.page = pagingParams.page;
             vm.users = data;
+            
+            console.log(data);
         }
 
         function onError(error) {

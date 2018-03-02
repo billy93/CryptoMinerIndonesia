@@ -31,6 +31,7 @@
     "jhipsterVersion": "4.13.3",
     "packageFolder": "com/cryptominer/indonesia",
     "jwtSecretKey": "5a957a7b07b12919c76bd23ea09909f239b5e2ff",
-    "jhiPrefix": "jhi"
+    "jhiPrefix": "jhi",
+    "herokuAppName": "crypto-miner-indonesia"
   }
 }

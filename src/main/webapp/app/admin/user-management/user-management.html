@@ -15,8 +15,9 @@
                 <th jh-sort-by="id"><span>ID</span><span class="glyphicon glyphicon-sort"></span></th>
                 <th jh-sort-by="login"><span>Login</span> <span class="glyphicon glyphicon-sort"></span></th>
                 <th jh-sort-by="email"><span>Email</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th></th>
-                                <th><span>Profiles</span></th>                <th jh-sort-by="createdDate"><span>Created Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th>Photo</th>
+                <th>KTP</th>
+                <th><span>Profiles</span></th><th jh-sort-by="createdDate"><span>Created Date</span> <span class="glyphicon glyphicon-sort"></span></th>
                 <th jh-sort-by="lastModifiedBy"><span>Last Modified By</span> <span class="glyphicon glyphicon-sort"></span></th>
                 <th jh-sort-by="lastModifiedDate"><span>Last Modified Date</span> <span class="glyphicon glyphicon-sort"></span></th>
                 <th></th>
@@ -27,6 +28,18 @@
                 <td><a ui-sref="user-management-detail({login:user.login})">{{user.id}}</a></td>
                 <td>{{user.login}}</td>
                 <td>{{user.email}}</td>
+                <td>
+                    <a ng-if="user.photo" ng-click="vm.openFile(user.imageContentType, user.photo)">
+                        <img data-ng-src="{{'data:' + user.photoContentType + ';base64,' + user.photo}}" style="max-height: 30px;" alt="Photo"/>
+                    </a>
+                    <span ng-if="user.photo">{{user.photoContentType}}, {{vm.byteSize(user.photo)}}</span>
+                </td>
+                 <td>
+                    <a ng-if="user.ktp" ng-click="vm.openFile(user.ktpContentType, user.ktp)">
+                        <img data-ng-src="{{'data:' + user.ktpContentType + ';base64,' + user.ktp}}" style="max-height: 30px;" alt="KTP"/>
+                    </a>
+                    <span ng-if="user.ktp">{{user.ktpContentType}}, {{vm.byteSize(user.ktp)}}</span>
+                </td>
                 <td>
                     <button class="btn btn-danger btn-xs" ng-click="vm.setActive(user, true)" ng-show="!user.activated"
                            >Deactivated</button>

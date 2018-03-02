@@ -28,6 +28,29 @@
             <column name="email" type="varchar(100)">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_email"/>
             </column>
+            
+            <column name="identity_number" type="varchar(100)"/>
+            <column name="btc_wallet" type="varchar(100)"/>
+            <column name="bank" type="varchar(100)"/>
+            <column name="account_number" type="varchar(100)"/>
+            <column name="phone_number" type="varchar(100)"/>
+            <column name="ktp" type="longblob">
+                
+            </column>
+            <column name="ktp_content_type" type="varchar(255)">
+                
+            </column>
+            <column name="photo" type="longblob">
+                
+            </column>
+            <column name="photo_content_type" type="varchar(255)">
+               
+            </column>
+            
+            <column name="agreement" type="boolean" valueBoolean="false">
+                <constraints nullable="true" />
+            </column>
+            
             <column name="image_url" type="varchar(256)"/>
             <column name="activated" type="boolean" valueBoolean="false">
                 <constraints nullable="false" />
@@ -89,6 +112,7 @@
                   file="config/liquibase/users.csv"
                   separator=";"
                   tableName="jhi_user">
+            <column name="agreement" type="boolean"/>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>

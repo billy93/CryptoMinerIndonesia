@@ -1,0 +1,35 @@
+
+<div>
+    <h2><span>Package Cmi</span> {{vm.packageCmi.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span>Username</span></dt>
+        <dd>
+            <span>{{vm.packageCmi.username}}</span>
+        </dd>
+        <dt><span>Amount</span></dt>
+        <dd>
+            <span>{{vm.packageCmi.amount}}</span>
+        </dd>
+        <dt><span>Start Date</span></dt>
+        <dd>
+            <span>{{vm.packageCmi.startDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>End Date</span></dt>
+        <dd>
+            <span>{{vm.packageCmi.endDate | date:'mediumDate'}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button" ui-sref="package-cmi-detail.edit({id:vm.packageCmi.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down"> Edit</span>
+    </button>
+</div>

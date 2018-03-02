@@ -14,7 +14,8 @@
         vm.doNotMatch = null;
         vm.error = null;
         vm.success = null;
-
+        vm.pattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]/;
+        
         Principal.identity().then(function(account) {
             vm.account = account;
         });
