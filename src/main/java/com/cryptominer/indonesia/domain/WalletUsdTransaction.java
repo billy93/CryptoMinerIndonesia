@@ -15,7 +15,7 @@ import com.cryptominer.indonesia.domain.enumeration.TransactionType;
  */
 @Entity
 @Table(name = "wallet_usd_transaction")
-public class WalletUsdTransaction implements Serializable {
+public class WalletUsdTransaction extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,6 +40,9 @@ public class WalletUsdTransaction implements Serializable {
     @Column(name = "txid")
     private String txid;
 
+    @Column(name = "description")
+    private String description;
+    
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -113,6 +116,14 @@ public class WalletUsdTransaction implements Serializable {
     public void setTxid(String txid) {
         this.txid = txid;
     }
+
+    public String getDescription() {
+		return description;
+	}
+    
+    public void setDescription(String description) {
+		this.description = description;
+	}
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override

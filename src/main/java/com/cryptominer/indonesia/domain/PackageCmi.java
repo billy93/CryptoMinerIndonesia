@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "package_cmi")
-public class PackageCmi implements Serializable {
+public class PackageCmi extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

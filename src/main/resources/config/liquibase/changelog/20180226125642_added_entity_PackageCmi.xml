@@ -37,10 +37,26 @@
             <column name="end_date" type="date">
                 <constraints nullable="true" />
             </column>
+            
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+            
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        
+                
+         <addForeignKeyConstraint baseColumnNames="package_cmi"
+                                baseTableName="wallet_btc_transaction"
+                                constraintName="fk_package_cmi_name"
+                                referencedColumnNames="id"
+                                referencedTableName="package_cmi"/>
+                                
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>
