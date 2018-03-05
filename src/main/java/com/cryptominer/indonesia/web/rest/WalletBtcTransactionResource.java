@@ -1,14 +1,12 @@
 package com.cryptominer.indonesia.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.cryptominer.indonesia.domain.WalletBtcTransaction;
-import com.cryptominer.indonesia.service.WalletBtcTransactionService;
-import com.cryptominer.indonesia.web.rest.errors.BadRequestAlertException;
-import com.cryptominer.indonesia.web.rest.util.HeaderUtil;
-import com.cryptominer.indonesia.web.rest.util.PaginationUtil;
-import com.cryptominer.indonesia.service.dto.WalletBtcTransactionCriteria;
-import com.cryptominer.indonesia.service.WalletBtcTransactionQueryService;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,16 +14,30 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import com.codahale.metrics.annotation.Timed;
+import com.cryptominer.indonesia.domain.User;
+import com.cryptominer.indonesia.domain.WalletBtcTransaction;
+import com.cryptominer.indonesia.domain.enumeration.TransactionType;
+import com.cryptominer.indonesia.repository.UserRepository;
+import com.cryptominer.indonesia.security.SecurityUtils;
+import com.cryptominer.indonesia.service.WalletBtcTransactionQueryService;
+import com.cryptominer.indonesia.service.WalletBtcTransactionService;
+import com.cryptominer.indonesia.service.dto.WalletBtcTransactionCriteria;
+import com.cryptominer.indonesia.web.rest.errors.BadRequestAlertException;
+import com.cryptominer.indonesia.web.rest.util.HeaderUtil;
+import com.cryptominer.indonesia.web.rest.util.PaginationUtil;
 
-import java.math.BigDecimal;
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing WalletBtcTransaction.
@@ -42,9 +54,12 @@ public class WalletBtcTransactionResource {
 
     private final WalletBtcTransactionQueryService walletBtcTransactionQueryService;
 
-    public WalletBtcTransactionResource(WalletBtcTransactionService walletBtcTransactionService, WalletBtcTransactionQueryService walletBtcTransactionQueryService) {
+    private final UserRepository userRepository;
+    
+    public WalletBtcTransactionResource(WalletBtcTransactionService walletBtcTransactionService, WalletBtcTransactionQueryService walletBtcTransactionQueryService, UserRepository userRepository) {
         this.walletBtcTransactionService = walletBtcTransactionService;
         this.walletBtcTransactionQueryService = walletBtcTransactionQueryService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -62,7 +77,17 @@ public class WalletBtcTransactionResource {
             throw new BadRequestAlertException("A new walletBtcTransaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
         
-        walletBtcTransaction.setAmount(new BigDecimal("0,000018"));
+        User u = userRepository.findOneByLogin(walletBtcTransaction.getUsername()).get();
+        if(walletBtcTransaction.getType() == TransactionType.DEPOSIT) {
+        		u.setBtcAmount(u.getBtcAmount().add(walletBtcTransaction.getAmount()));
+        }
+        else if(walletBtcTransaction.getType() == TransactionType.WITHDRAW) {
+        		u.setBtcAmount(u.getBtcAmount().subtract(walletBtcTransaction.getAmount()));
+        }
+        userRepository.save(u);
+        
+        log.debug("REST request BTC AMOUNT : {}", u.getBtcAmount());
+        
         WalletBtcTransaction result = walletBtcTransactionService.save(walletBtcTransaction);
         return ResponseEntity.created(new URI("/api/wallet-btc-transactions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -102,6 +127,10 @@ public class WalletBtcTransactionResource {
     @Timed
     public ResponseEntity<List<WalletBtcTransaction>> getAllWalletBtcTransactions(WalletBtcTransactionCriteria criteria, Pageable pageable) {
         log.debug("REST request to get WalletBtcTransactions by criteria: {}", criteria);
+        
+        StringFilter sf = new StringFilter();
+        sf.setEquals(SecurityUtils.getCurrentUserLogin().get());
+        criteria.setUsername(sf);
         Page<WalletBtcTransaction> page = walletBtcTransactionQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/wallet-btc-transactions");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);

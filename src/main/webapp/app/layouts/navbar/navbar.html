@@ -164,13 +164,13 @@
                         <li ui-sref-active="active">
                                 <a ui-sref="wallet-usd-transaction" ng-click="vm.collapseNavbar()">
                                     <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
-                                    <span>USD : 0$</span>
+                                    <span>USD : {{vm.account.usdAmount}}$</span>
                                 </a>
                             </li>
                         <li ui-sref-active="active">
                                 <a ui-sref="wallet-btc-transaction" ng-click="vm.collapseNavbar()">
                                     <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
-                                    <span>BTC : 0</span>
+                                    <span>BTC : {{vm.account.btcAmount | number:8}}</span>
                                 </a>
                             </li>
                         <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->

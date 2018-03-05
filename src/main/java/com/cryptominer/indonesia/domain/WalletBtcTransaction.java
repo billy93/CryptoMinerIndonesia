@@ -27,7 +27,7 @@ public class WalletBtcTransaction extends AbstractAuditingEntity  implements Ser
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "amount", precision=10, scale=2)
+    @Column(name = "amount", precision=10, scale=8)
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)

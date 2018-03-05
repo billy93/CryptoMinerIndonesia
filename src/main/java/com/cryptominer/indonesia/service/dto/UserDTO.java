@@ -11,6 +11,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.Column;
 import javax.persistence.Lob;
 import javax.validation.constraints.*;
+
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -74,7 +76,28 @@ public class UserDTO {
 
     private String photoContentType;
     
-    public String getIdentityNumber() {
+    private BigDecimal btcAmount;
+    
+    private BigDecimal usdAmount;
+    
+    
+    public BigDecimal getBtcAmount() {
+		return btcAmount;
+	}
+
+	public void setBtcAmount(BigDecimal btcAmount) {
+		this.btcAmount = btcAmount;
+	}
+
+	public BigDecimal getUsdAmount() {
+		return usdAmount;
+	}
+
+	public void setUsdAmount(BigDecimal usdAmount) {
+		this.usdAmount = usdAmount;
+	}
+
+	public String getIdentityNumber() {
 		return identityNumber;
 	}
 
@@ -143,6 +166,8 @@ public class UserDTO {
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
+        this.btcAmount = user.getBtcAmount();
+        this.usdAmount = user.getUsdAmount();
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());

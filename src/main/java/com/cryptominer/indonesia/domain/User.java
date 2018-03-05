@@ -1,22 +1,33 @@
 package com.cryptominer.indonesia.domain;
 
-import com.cryptominer.indonesia.config.Constants;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.validator.constraints.Email;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
-import java.time.Instant;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.validator.constraints.Email;
+
+import com.cryptominer.indonesia.config.Constants;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * A user.
@@ -132,8 +143,29 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(nullable = false)
     private boolean agreement = false;
 
+    @Column(name="btc_amount",nullable = false, precision=10, scale=8)
+    private BigDecimal btcAmount;
+    @Column(name="usd_amount",nullable = false, precision=10, scale=2)
+    private BigDecimal usdAmount;
     
-    public byte[] getKtp() {
+    
+    public BigDecimal getBtcAmount() {
+		return btcAmount;
+	}
+
+	public void setBtcAmount(BigDecimal btcAmount) {
+		this.btcAmount = btcAmount;
+	}
+
+	public BigDecimal getUsdAmount() {
+		return usdAmount;
+	}
+
+	public void setUsdAmount(BigDecimal usdAmount) {
+		this.usdAmount = usdAmount;
+	}
+
+	public byte[] getKtp() {
 		return ktp;
 	}
 

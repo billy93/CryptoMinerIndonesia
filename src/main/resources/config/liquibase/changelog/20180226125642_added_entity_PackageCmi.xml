@@ -51,7 +51,7 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
                 
-         <addForeignKeyConstraint baseColumnNames="package_cmi"
+         <addForeignKeyConstraint baseColumnNames="package_cmi_id"
                                 baseTableName="wallet_btc_transaction"
                                 constraintName="fk_package_cmi_name"
                                 referencedColumnNames="id"

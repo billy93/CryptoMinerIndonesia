@@ -69,6 +69,14 @@
             </column>
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
+            
+            <column name="btc_amount" type="decimal(10,8)">
+                <constraints nullable="true" />
+            </column>
+            <column name="usd_amount" type="decimal(10,2)">
+                <constraints nullable="true" />
+            </column>
+            
         </createTable>
         <createIndex indexName="idx_user_login"
             tableName="jhi_user"

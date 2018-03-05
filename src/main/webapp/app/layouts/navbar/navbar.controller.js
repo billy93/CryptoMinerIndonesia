@@ -24,6 +24,16 @@
         vm.collapseNavbar = collapseNavbar;
         vm.$state = $state;
 
+        getAccount();
+
+        function getAccount() {
+            Principal.identity().then(function(account) {
+                vm.account = account;
+                console.log(vm.account);
+                vm.isAuthenticated = Principal.isAuthenticated;
+            });
+        }
+        
         function login() {
             collapseNavbar();
             LoginService.open();

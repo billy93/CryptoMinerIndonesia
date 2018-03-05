@@ -16,10 +16,10 @@
     <br/>
     
     <uib-tabset active="tabs">
-		<uib-tab index="0" heading="Tarik">
+		<uib-tab index="0" heading="Terima">
 		</uib-tab>	    
-		<uib-tab index="1" heading="Setor">
-		</uib-tab>	    
+		<uib-tab index="1" heading="Kirim">
+		</uib-tab>	 	    
 		<uib-tab index="2" heading="Riwayat">
 		    <div class="table-responsive">
 		        <table class="jh-table table table-striped">
@@ -31,6 +31,7 @@
 		                    <th jh-sort-by="type"><span>Type</span> <span class="glyphicon glyphicon-sort"></span></th>
 		                    <th jh-sort-by="fromUsername"><span>From Username</span> <span class="glyphicon glyphicon-sort"></span></th>
 		                    <th jh-sort-by="txid"><span>Txid</span> <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="createdDate"><span>Time</span> <span class="glyphicon glyphicon-sort"></span></th>
 		                    <th></th>
 		                </tr>
 		            </thead>
@@ -42,6 +43,7 @@
 		                    <td>{{walletUsdTransaction.type}}</td>
 		                    <td>{{walletUsdTransaction.fromUsername}}</td>
 		                    <td>{{walletUsdTransaction.txid}}</td>
+		                    <td>{{walletUsdTransaction.createdTime}}</td>
 		                    <td class="text-right">
 		                        <div class="btn-group flex-btn-group-container">
 		                            <button type="submit"

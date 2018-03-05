@@ -29,7 +29,7 @@
             <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="amount" type="decimal(10,2)">
+            <column name="amount" type="decimal(10,8)">
                 <constraints nullable="true" />
             </column>
 
@@ -54,7 +54,7 @@
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
             
-			<column name="package_cmi" type="bigint">
+			<column name="package_cmi_id" type="bigint">
 			                <constraints nullable="true" />
 			</column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->

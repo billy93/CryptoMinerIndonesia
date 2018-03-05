@@ -16,9 +16,9 @@
     <br/>
     
     <uib-tabset active="tabs">
-		<uib-tab index="0" heading="Tarik">
+		<uib-tab index="0" heading="Terima">
 		</uib-tab>	    
-		<uib-tab index="1" heading="Setor">
+		<uib-tab index="1" heading="Kirim">
 		</uib-tab>	    
 		<uib-tab index="2" heading="Riwayat">    
 		    <div class="table-responsive">
@@ -39,11 +39,11 @@
 		                <tr ng-repeat="walletBtcTransaction in vm.walletBtcTransactions track by walletBtcTransaction.id">
 		                    <td><a ui-sref="wallet-btc-transaction-detail({id:walletBtcTransaction.id})">{{walletBtcTransaction.id}}</a></td>
 		                    <td>{{walletBtcTransaction.username}}</td>
-		                    <td>{{walletBtcTransaction.amount}}</td>
+		                    <td>{{walletBtcTransaction.amount | number:8}}</td>
 		                    <td>{{walletBtcTransaction.type}}</td>
 		                    <td>{{walletBtcTransaction.fromUsername}}</td>
 		                    <td>{{walletBtcTransaction.txid}}</td>
-		                    <td>{{walletBtcTransaction.txid}}</td>
+		                    <td>{{walletBtcTransaction.createdDate}}</td>
 		                    <td class="text-right">
 		                        <div class="btn-group flex-btn-group-container">
 		                            <button type="submit"
