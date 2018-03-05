@@ -77,6 +77,7 @@ public class WalletBtcTransactionResource {
             throw new BadRequestAlertException("A new walletBtcTransaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
         
+        //sender
         User u = userRepository.findOneByLogin(walletBtcTransaction.getUsername()).get();
         if(walletBtcTransaction.getType() == TransactionType.DEPOSIT) {
         		u.setBtcAmount(u.getBtcAmount().add(walletBtcTransaction.getAmount()));

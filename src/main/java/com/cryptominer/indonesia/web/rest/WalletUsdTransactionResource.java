@@ -1,7 +1,10 @@
 package com.cryptominer.indonesia.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.cryptominer.indonesia.domain.User;
 import com.cryptominer.indonesia.domain.WalletUsdTransaction;
+import com.cryptominer.indonesia.domain.enumeration.TransactionType;
+import com.cryptominer.indonesia.repository.UserRepository;
 import com.cryptominer.indonesia.service.WalletUsdTransactionService;
 import com.cryptominer.indonesia.web.rest.errors.BadRequestAlertException;
 import com.cryptominer.indonesia.web.rest.util.HeaderUtil;
@@ -39,10 +42,13 @@ public class WalletUsdTransactionResource {
     private final WalletUsdTransactionService walletUsdTransactionService;
 
     private final WalletUsdTransactionQueryService walletUsdTransactionQueryService;
-
-    public WalletUsdTransactionResource(WalletUsdTransactionService walletUsdTransactionService, WalletUsdTransactionQueryService walletUsdTransactionQueryService) {
+    
+    private final UserRepository userRepository;
+    
+    public WalletUsdTransactionResource(WalletUsdTransactionService walletUsdTransactionService, WalletUsdTransactionQueryService walletUsdTransactionQueryService, UserRepository userRepository) {
         this.walletUsdTransactionService = walletUsdTransactionService;
         this.walletUsdTransactionQueryService = walletUsdTransactionQueryService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -59,6 +65,17 @@ public class WalletUsdTransactionResource {
         if (walletUsdTransaction.getId() != null) {
             throw new BadRequestAlertException("A new walletUsdTransaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        
+        //sender
+        User u = userRepository.findOneByLogin(walletUsdTransaction.getUsername()).get();
+        if(walletUsdTransaction.getType() == TransactionType.DEPOSIT) {
+        		u.setUsdAmount(u.getUsdAmount().add(walletUsdTransaction.getAmount()));
+        }
+        else if(walletUsdTransaction.getType() == TransactionType.WITHDRAW) {
+        		u.setUsdAmount(u.getUsdAmount().subtract(walletUsdTransaction.getAmount()));
+        }
+        userRepository.save(u);
+        
         WalletUsdTransaction result = walletUsdTransactionService.save(walletUsdTransaction);
         return ResponseEntity.created(new URI("/api/wallet-usd-transactions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))

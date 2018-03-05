@@ -16,9 +16,53 @@
     <br/>
     
     <uib-tabset active="tabs">
-		<uib-tab index="0" heading="Terima">
+		<uib-tab index="0" heading="Setor">
 		</uib-tab>	    
-		<uib-tab index="1" heading="Kirim">
+		<uib-tab index="1" heading="Tarik">
+			<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+				<div class="form-group">
+		            <label class="control-label">Jumlah Penarikan</label>
+		            <input type="text" class="form-control" name="amountWithdraw" id="field_amountWithdraw"
+		                    ng-model="vm.walletUsdTransaction.amountWithdraw"
+		                    required/>
+		            <div ng-show="editForm.username.$invalid">
+		                <p class="help-block"
+		                    ng-show="editForm.username.$error.required">
+		                    This field is required.
+		                </p>
+		            </div>
+		        </div>
+		        <div class="form-group">
+		            <label class="control-label">Biaya Penarikan</label>
+		            <input type="text" class="form-control" name="withdrawFee" id="field_withdrawFee"
+		                    ng-model="vm.walletUsdTransaction.withdrawFee" disabled
+		                    required/>
+		            <div ng-show="editForm.withdrawFee.$invalid">
+		                <p class="help-block"
+		                    ng-show="editForm.withdrawFee.$error.required">
+		                    This field is required.
+		                </p>
+		            </div>
+		        </div>
+		        <div class="form-group">
+		            <label class="control-label">PIN Google AUTH</label>
+		            <input type="text" class="form-control" name="pin" id="field_pin"
+		                    ng-model="vm.walletUsdTransaction.pin"
+		                    required/>
+		            <div ng-show="editForm.pin.$invalid">
+		                <p class="help-block"
+		                    ng-show="editForm.pin.$error.required">
+		                    This field is required.
+		                </p>
+		            </div>
+		        </div>
+		        
+		        <button class="btn btn-primary" >
+                    <span >
+                        Withdraw
+                    </span>
+                </button>
+	        </form>
 		</uib-tab>	 	    
 		<uib-tab index="2" heading="Riwayat">
 		    <div class="table-responsive">
@@ -43,7 +87,7 @@
 		                    <td>{{walletUsdTransaction.type}}</td>
 		                    <td>{{walletUsdTransaction.fromUsername}}</td>
 		                    <td>{{walletUsdTransaction.txid}}</td>
-		                    <td>{{walletUsdTransaction.createdTime}}</td>
+		                    <td>{{walletUsdTransaction.createdDate | date:'dd/MM/yy HH:mm'}}</td>
 		                    <td class="text-right">
 		                        <div class="btn-group flex-btn-group-container">
 		                            <button type="submit"
@@ -75,5 +119,55 @@
 		        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
 		    </div>
 	    </uib-tab>
+	    <uib-tab index="3" heading="Konfirmasi Transfer">
+	    		<p>
+	    			Lengkapi isian berikut untuk melakukan konfirmasi transfer
+	    		</p>
+	    		
+	    		<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+				<div class="form-group">
+		            <label class="control-label">Jumlah Transfer</label>
+		            <input type="text" class="form-control" name="amountTransfer" id="field_amountTransfer"
+		                    ng-model="vm.walletUsdTransaction.amountTransfer"
+		                    required/>
+		            <div ng-show="editForm.amountTransfer.$invalid">
+		                <p class="help-block"
+		                    ng-show="editForm.amountTransfer.$error.required">
+		                    This field is required.
+		                </p>
+		            </div>
+		        </div>
+		        <div class="form-group">
+		            <label class="control-label">Biaya Penarikan</label>
+		            <input type="text" class="form-control" name="withdrawFee" id="field_withdrawFee"
+		                    ng-model="vm.walletUsdTransaction.withdrawFee" disabled
+		                    required/>
+		            <div ng-show="editForm.withdrawFee.$invalid">
+		                <p class="help-block"
+		                    ng-show="editForm.withdrawFee.$error.required">
+		                    This field is required.
+		                </p>
+		            </div>
+		        </div>
+		        <div class="form-group">
+		            <label class="control-label">PIN Google AUTH</label>
+		            <input type="text" class="form-control" name="pin" id="field_pin"
+		                    ng-model="vm.walletUsdTransaction.pin"
+		                    required/>
+		            <div ng-show="editForm.pin.$invalid">
+		                <p class="help-block"
+		                    ng-show="editForm.pin.$error.required">
+		                    This field is required.
+		                </p>
+		            </div>
+		        </div>
+		        
+		        <button class="btn btn-primary" >
+                    <span >
+                        Withdraw
+                    </span>
+                </button>
+	        </form>
+		</uib-tab>	 	   
     </uib-tabset>
 </div>
