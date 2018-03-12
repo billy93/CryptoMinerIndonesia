@@ -25,6 +25,14 @@
         {
             "fieldName": "txid",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "toUsername",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20180213134808",

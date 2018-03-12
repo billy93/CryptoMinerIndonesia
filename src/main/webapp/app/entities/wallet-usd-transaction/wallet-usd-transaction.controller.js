@@ -5,7 +5,7 @@
         .module('cryptoMinerIndonesiaApp')
         .controller('WalletUsdTransactionController', WalletUsdTransactionController);
 
-    WalletUsdTransactionController.$inject = ['$state', 'WalletUsdTransaction', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
+    WalletUsdTransactionController.$inject = ['$state', 'WalletUsdTransaction', 'Withdraw', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
 
     function WalletUsdTransactionController($state, WalletUsdTransaction, Withdraw, ParseLinks, AlertService, paginationConstants, pagingParams) {
 
@@ -29,9 +29,10 @@
         		});
         };
         
-        vm.withdraw = function(){
+        vm.withdrawData = function(){
+        		vm.withdraw.type = "USD";
 	    		Withdraw.save(vm.withdraw, function(result){
-	    			alert('Withdraw Success');
+	    			alert('Request Withdraw sukses, kami akan memberikan notifikasi apabila proses telah selesai dilakukan');
 	    		}, function(error){
 	    			
 	    		});        	
@@ -42,7 +43,7 @@
         }
         vm.changeWithdrawAmount = function(){
 	    		//console.log(vm.walletUsdTransaction.amount);
-	     	vm.withdraw.fee = parseInt(vm.withdraw.amount) * 1 / 100;
+	     	vm.withdraw.fee = parseInt(vm.withdraw.amount) * 5 / 100;
 	    }
         
         function loadAll () {

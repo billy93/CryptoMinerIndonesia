@@ -20,6 +20,12 @@
                     />
         </div>
         <div class="form-group">
+            <label class="control-label" for="field_type">Type</label>
+            <input type="text" class="form-control" name="type" id="field_type"
+                    ng-model="vm.withdraw.type"
+                    />
+        </div>
+        <div class="form-group">
             <label class="control-label" for="field_amount">Amount</label>
             <input type="number" class="form-control" name="amount" id="field_amount"
                     ng-model="vm.withdraw.amount"
@@ -31,7 +37,26 @@
                     ng-model="vm.withdraw.status"
                     />
         </div>
+        <div class="form-group">
+            <label class="control-label" for="field_fee">Fee</label>
+            <input type="number" class="form-control" name="fee" id="field_fee"
+                    ng-model="vm.withdraw.fee"
+                    />
+        </div>
 
+        <div class="form-group">
+            <label for="field_walletUsdTransaction">Wallet Usd Transaction</label>
+            <select class="form-control" id="field_walletUsdTransaction" name="walletUsdTransaction" ng-model="vm.withdraw.walletUsdTransaction" ng-options="id as id.id for id in vm.walletusdtransactions | orderBy:'id' track by id.id">
+                <option value=""></option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="field_walletBtcTransaction">Wallet Btc Transaction</label>
+            <select class="form-control" id="field_walletBtcTransaction" name="walletBtcTransaction" ng-model="vm.withdraw.walletBtcTransaction" ng-options="id as id.id for id in vm.walletbtctransactions | orderBy:'id' track by id.id">
+                <option value=""></option>
+            </select>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">

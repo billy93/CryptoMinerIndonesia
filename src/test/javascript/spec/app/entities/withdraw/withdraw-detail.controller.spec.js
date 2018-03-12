@@ -4,7 +4,7 @@ describe('Controller Tests', function() {
 
     describe('Withdraw Management Detail Controller', function() {
         var $scope, $rootScope;
-        var MockEntity, MockPreviousState, MockWithdraw;
+        var MockEntity, MockPreviousState, MockWithdraw, MockId;
         var createController;
 
         beforeEach(inject(function($injector) {
@@ -13,6 +13,7 @@ describe('Controller Tests', function() {
             MockEntity = jasmine.createSpy('MockEntity');
             MockPreviousState = jasmine.createSpy('MockPreviousState');
             MockWithdraw = jasmine.createSpy('MockWithdraw');
+            MockId = jasmine.createSpy('MockId');
             
 
             var locals = {
@@ -20,7 +21,8 @@ describe('Controller Tests', function() {
                 '$rootScope': $rootScope,
                 'entity': MockEntity,
                 'previousState': MockPreviousState,
-                'Withdraw': MockWithdraw
+                'Withdraw': MockWithdraw,
+                'Id': MockId
             };
             createController = function() {
                 $injector.get('$controller')("WithdrawDetailController", locals);

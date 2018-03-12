@@ -5,9 +5,9 @@
         .module('cryptoMinerIndonesiaApp')
         .controller('WithdrawDetailController', WithdrawDetailController);
 
-    WithdrawDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Withdraw'];
+    WithdrawDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Withdraw', 'Id'];
 
-    function WithdrawDetailController($scope, $rootScope, $stateParams, previousState, entity, Withdraw) {
+    function WithdrawDetailController($scope, $rootScope, $stateParams, previousState, entity, Withdraw, Id) {
         var vm = this;
 
         vm.withdraw = entity;

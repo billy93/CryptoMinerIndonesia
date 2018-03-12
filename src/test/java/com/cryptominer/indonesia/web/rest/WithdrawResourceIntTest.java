@@ -48,6 +48,9 @@ public class WithdrawResourceIntTest {
     private static final String DEFAULT_STATUS = "AAAAAAAAAA";
     private static final String UPDATED_STATUS = "BBBBBBBBBB";
 
+    private static final BigDecimal DEFAULT_FEE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_FEE = new BigDecimal(2);
+
     @Autowired
     private WithdrawRepository withdrawRepository;
 
@@ -70,7 +73,7 @@ public class WithdrawResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final WithdrawResource withdrawResource = new WithdrawResource(withdrawRepository);
+        final WithdrawResource withdrawResource = new WithdrawResource(withdrawRepository, null, null);
         this.restWithdrawMockMvc = MockMvcBuilders.standaloneSetup(withdrawResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -88,7 +91,8 @@ public class WithdrawResourceIntTest {
         Withdraw withdraw = new Withdraw()
             .username(DEFAULT_USERNAME)
             .amount(DEFAULT_AMOUNT)
-            .status(DEFAULT_STATUS);
+            .status(DEFAULT_STATUS)
+            .fee(DEFAULT_FEE);
         return withdraw;
     }
 
@@ -115,6 +119,7 @@ public class WithdrawResourceIntTest {
         assertThat(testWithdraw.getUsername()).isEqualTo(DEFAULT_USERNAME);
         assertThat(testWithdraw.getAmount()).isEqualTo(DEFAULT_AMOUNT);
         assertThat(testWithdraw.getStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testWithdraw.getFee()).isEqualTo(DEFAULT_FEE);
     }
 
     @Test
@@ -149,7 +154,8 @@ public class WithdrawResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(withdraw.getId().intValue())))
             .andExpect(jsonPath("$.[*].username").value(hasItem(DEFAULT_USERNAME.toString())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].fee").value(hasItem(DEFAULT_FEE.intValue())));
     }
 
     @Test
@@ -165,7 +171,8 @@ public class WithdrawResourceIntTest {
             .andExpect(jsonPath("$.id").value(withdraw.getId().intValue()))
             .andExpect(jsonPath("$.username").value(DEFAULT_USERNAME.toString()))
             .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.intValue()))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
+            .andExpect(jsonPath("$.fee").value(DEFAULT_FEE.intValue()));
     }
 
     @Test
@@ -190,7 +197,8 @@ public class WithdrawResourceIntTest {
         updatedWithdraw
             .username(UPDATED_USERNAME)
             .amount(UPDATED_AMOUNT)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .fee(UPDATED_FEE);
 
         restWithdrawMockMvc.perform(put("/api/withdraws")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -204,6 +212,7 @@ public class WithdrawResourceIntTest {
         assertThat(testWithdraw.getUsername()).isEqualTo(UPDATED_USERNAME);
         assertThat(testWithdraw.getAmount()).isEqualTo(UPDATED_AMOUNT);
         assertThat(testWithdraw.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testWithdraw.getFee()).isEqualTo(UPDATED_FEE);
     }
 
     @Test

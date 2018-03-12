@@ -30,6 +30,9 @@ public class WalletUsdTransaction extends AbstractAuditingEntity implements Seri
     @Column(name = "amount", precision=10, scale=2)
     private BigDecimal amount;
 
+    @Column(name = "fee", precision=10, scale=2)
+    private BigDecimal fee;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "jhi_type")
     private TransactionType type;
@@ -40,12 +43,12 @@ public class WalletUsdTransaction extends AbstractAuditingEntity implements Seri
     @Column(name = "txid")
     private String txid;
 
-    @Column(name = "description")
-    private String description;
-    
+    @Column(name = "to_username")
+    private String toUsername;
+
     @Column(name = "status")
     private String status;
-    
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -120,23 +123,41 @@ public class WalletUsdTransaction extends AbstractAuditingEntity implements Seri
         this.txid = txid;
     }
 
-    public String getDescription() {
-		return description;
-	}
-    
-    public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getToUsername() {
+        return toUsername;
+    }
+
+    public WalletUsdTransaction toUsername(String toUsername) {
+        this.toUsername = toUsername;
+        return this;
+    }
+
+    public void setToUsername(String toUsername) {
+        this.toUsername = toUsername;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public WalletUsdTransaction status(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
     
     
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    public String getStatus() {
-		return status;
+    public BigDecimal getFee() {
+		return fee;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setFee(BigDecimal fee) {
+		this.fee = fee;
 	}
 
 	@Override
@@ -168,6 +189,8 @@ public class WalletUsdTransaction extends AbstractAuditingEntity implements Seri
             ", type='" + getType() + "'" +
             ", fromUsername='" + getFromUsername() + "'" +
             ", txid='" + getTxid() + "'" +
+            ", toUsername='" + getToUsername() + "'" +
+            ", status='" + getStatus() + "'" +
             "}";
     }
 }

@@ -34,7 +34,9 @@
             <column name="amount" type="decimal(10,8)">
                 <constraints nullable="true" />
             </column>
-
+			<column name="fee" type="decimal(10,8)">
+                <constraints nullable="true" />
+            </column>
             <column name="jhi_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -43,6 +45,10 @@
                 <constraints nullable="true" />
             </column>
 
+			<column name="to_username" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            
             <column name="txid" type="varchar(255)">
                 <constraints nullable="true" />
             </column>

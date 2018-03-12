@@ -120,6 +120,8 @@
                                 type: null,
                                 fromUsername: null,
                                 txid: null,
+                                toUsername: null,
+                                status: null,
                                 id: null
                             };
                         }

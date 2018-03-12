@@ -1,6 +1,15 @@
 {
     "fluentMethods": true,
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipName": "walletUsdTransaction",
+            "otherEntityName": "WalletUsdTransaction",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "withdraw"
+        }
+    ],
     "fields": [
         {
             "fieldName": "username",
@@ -13,6 +22,10 @@
         {
             "fieldName": "status",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "fee",
+            "fieldType": "BigDecimal"
         }
     ],
     "changelogDate": "20180309103633",

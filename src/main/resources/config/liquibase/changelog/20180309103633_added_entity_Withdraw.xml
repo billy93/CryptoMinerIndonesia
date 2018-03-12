@@ -26,7 +26,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="amount" type="decimal(10,2)">
+            <column name="amount" type="decimal(10,8)">
                 <constraints nullable="true" />
             </column>
 
@@ -34,6 +34,19 @@
                 <constraints nullable="true" />
             </column>
 
+			<column name="type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="fee" type="decimal(10,8)">
+                <constraints nullable="true" />
+            </column>
+            <column name="wallet_usd_transaction_id" type="bigint">
+                <constraints unique="true" nullable="true" />
+            </column>
+             <column name="wallet_btc_transaction_id" type="bigint">
+                <constraints unique="true" nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         

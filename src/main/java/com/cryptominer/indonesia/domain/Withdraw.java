@@ -23,12 +23,27 @@ public class Withdraw implements Serializable {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "amount", precision=10, scale=2)
+    @Column(name = "amount", precision=10, scale=8)
     private BigDecimal amount;
 
     @Column(name = "status")
     private String status;
 
+    @Column(name = "fee", precision=10, scale=8)
+    private BigDecimal fee;
+
+    @Column(name = "type")
+    private String type;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private WalletUsdTransaction walletUsdTransaction;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private WalletBtcTransaction walletBtcTransaction;
+
+    
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -76,9 +91,53 @@ public class Withdraw implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public BigDecimal getFee() {
+        return fee;
+    }
+
+    public Withdraw fee(BigDecimal fee) {
+        this.fee = fee;
+        return this;
+    }
+
+    public void setFee(BigDecimal fee) {
+        this.fee = fee;
+    }
+
+    public WalletUsdTransaction getWalletUsdTransaction() {
+        return walletUsdTransaction;
+    }
+
+    public Withdraw walletUsdTransaction(WalletUsdTransaction id) {
+        this.walletUsdTransaction = id;
+        return this;
+    }
+
+    public void setWalletUsdTransaction(WalletUsdTransaction id) {
+        this.walletUsdTransaction = id;
+    }
+    
+    
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    @Override
+    public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public WalletBtcTransaction getWalletBtcTransaction() {
+		return walletBtcTransaction;
+	}
+
+	public void setWalletBtcTransaction(WalletBtcTransaction walletBtcTransaction) {
+		this.walletBtcTransaction = walletBtcTransaction;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -105,6 +164,7 @@ public class Withdraw implements Serializable {
             ", username='" + getUsername() + "'" +
             ", amount=" + getAmount() +
             ", status='" + getStatus() + "'" +
+            ", fee=" + getFee() +
             "}";
     }
 }

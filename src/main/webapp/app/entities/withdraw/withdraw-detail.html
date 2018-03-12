@@ -16,6 +16,14 @@
         <dd>
             <span>{{vm.withdraw.status}}</span>
         </dd>
+        <dt><span>Fee</span></dt>
+        <dd>
+            <span>{{vm.withdraw.fee}}</span>
+        </dd>
+        <dt><span>Wallet Usd Transaction</span></dt>
+        <dd>
+            <a ui-sref="id-detail({id:vm.withdraw.walletUsdTransaction.id})">{{vm.withdraw.walletUsdTransaction.id}}</a>
+        </dd>
     </dl>
 
     <button type="submit"

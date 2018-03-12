@@ -54,6 +54,18 @@
 		                </p>
 		            </div>
 		        </div>
+		        <div class="form-group">
+		            <label class="control-label">PIN Google AUTH</label>
+		            <input type="text" class="form-control" name="pin" id="field_pin"
+		                    ng-model="vm.withdraw.pin"
+		                    required/>
+		            <div ng-show="editForm.pin.$invalid">
+		                <p class="help-block"
+		                    ng-show="editForm.pin.$error.required">
+		                    This field is required.
+		                </p>
+		            </div>
+		        </div>
 		        <button class="btn btn-primary" >
                     <span >
                         Transfer
@@ -62,7 +74,7 @@
 	        </form>
 		</uib-tab>	    
 		<uib-tab index="1" heading="Tarik">
-			<form name="editForm" role="form" novalidate ng-submit="vm.withdraw()" show-validation>
+			<form name="editForm" role="form" novalidate ng-submit="vm.withdrawData()" show-validation>
 				<div class="form-group">
 		            <label class="control-label">Jumlah Penarikan</label>
 		            <input type="text" class="form-control" name="amount" id="field_amountWithdraw"
@@ -114,6 +126,7 @@
 		            <thead>
 		                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
 		                    <th jh-sort-by="amount"><span>Amount</span> <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="fee"><span>Fee</span> <span class="glyphicon glyphicon-sort"></span></th>
 		                    <th jh-sort-by="type"><span>Type</span> <span class="glyphicon glyphicon-sort"></span></th>
 		                    <th jh-sort-by="status"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
 		                    <th jh-sort-by="createdDate"><span>Date Time</span> <span class="glyphicon glyphicon-sort"></span></th>
@@ -123,6 +136,7 @@
 		            <tbody>
 		                <tr ng-repeat="walletUsdTransaction in vm.walletUsdTransactions track by walletUsdTransaction.id">
 		                    <td>{{walletUsdTransaction.amount}}</td>
+		                    <td>{{walletUsdTransaction.fee}}</td>
 		                    <td>{{walletUsdTransaction.type}}</td>
 		                    <td>{{walletUsdTransaction.status}}</td>
 		                    <td>{{walletUsdTransaction.createdDate | date:'dd/MM/yy HH:mm'}}</td>

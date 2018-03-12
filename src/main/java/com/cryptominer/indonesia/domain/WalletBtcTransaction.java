@@ -37,6 +37,9 @@ public class WalletBtcTransaction extends AbstractAuditingEntity  implements Ser
     @Column(name = "from_username")
     private String fromUsername;
 
+    @Column(name = "to_username")
+    private String toUsername;
+    
     @Column(name = "txid")
     private String txid;
     
@@ -45,6 +48,9 @@ public class WalletBtcTransaction extends AbstractAuditingEntity  implements Ser
 
     @Column(name = "description")
     private String description;
+    
+    @Column(name = "fee", precision=10, scale=8)
+    private BigDecimal fee;
 
     @ManyToOne
     private PackageCmi packageCmi;
@@ -139,10 +145,25 @@ public class WalletBtcTransaction extends AbstractAuditingEntity  implements Ser
 		this.description = description;
 	}
     
-    
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    public String getStatus() {
+    public String getToUsername() {
+		return toUsername;
+	}
+
+	public void setToUsername(String toUsername) {
+		this.toUsername = toUsername;
+	}
+
+	public BigDecimal getFee() {
+		return fee;
+	}
+
+	public void setFee(BigDecimal fee) {
+		this.fee = fee;
+	}
+
+	public String getStatus() {
 		return status;
 	}
 

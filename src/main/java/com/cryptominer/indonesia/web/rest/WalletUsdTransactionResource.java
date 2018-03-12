@@ -25,6 +25,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -100,8 +102,10 @@ public class WalletUsdTransactionResource {
             throw new BadRequestAlertException("A new walletUsdTransaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
         
+        BigDecimal totalTransfer = walletUsdTransaction.getAmount().add(new BigDecimal(walletUsdTransaction.getAmount().intValue() * 5 / 100));
+	      
         User from = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
-        from.setUsdAmount(from.getUsdAmount().subtract(walletUsdTransaction.getAmount()));
+        from.setUsdAmount(from.getUsdAmount().subtract(totalTransfer));
         if(from.getUsdAmount().intValue() < 0) {
         		throw new BadRequestAlertException("Insufficient Amount", ENTITY_NAME, "insufficient");
         }
@@ -110,23 +114,34 @@ public class WalletUsdTransactionResource {
 	        
 	        WalletUsdTransaction x = new WalletUsdTransaction();
 	        x.setAmount(walletUsdTransaction.getAmount());
-//	        x.setFromUsername(SecurityUtils.getCurrentUserLogin().get());
+	        x.setFromUsername(SecurityUtils.getCurrentUserLogin().get());
 	        x.setUsername(walletUsdTransaction.getUsername());
-	        x.setType(TransactionType.TRANSFER);
-	        x.setCreatedBy(walletUsdTransaction.getUsername());
-	        x.setStatus("SUCCESS");
+	        x.setType(TransactionType.DEPOSIT);
+	        x.setStatus("COMPLETE");
 	        walletUsdTransactionService.save(x);
 	        
 	        WalletUsdTransaction y = new WalletUsdTransaction();
 	        y.setAmount(walletUsdTransaction.getAmount());
-//	        y.setFromUsername(SecurityUtils.getCurrentUserLogin().get());
 	        y.setUsername(SecurityUtils.getCurrentUserLogin().get());
+	        y.setToUsername(walletUsdTransaction.getUsername());
 	        y.setType(TransactionType.TRANSFER);
-	        y.setStatus("SUCCESS");
+	        y.setFee(new BigDecimal(walletUsdTransaction.getAmount().intValue() * 5 / 100));
+	        y.setStatus("COMPLETE");
 	        walletUsdTransactionService.save(y);
 	        
+	        WalletUsdTransaction z = new WalletUsdTransaction();
+	        z.setAmount(new BigDecimal(walletUsdTransaction.getAmount().intValue() * 5 / 100));
+	        z.setUsername("itdev");
+	        z.setType(TransactionType.FEE);
+	        z.setStatus("COMPLETE");
+	        walletUsdTransactionService.save(z);
+	        
+	        User itdev = userRepository.findOneByLogin("itdev").get();
+	        itdev.setUsdAmount(itdev.getUsdAmount().add(new BigDecimal(walletUsdTransaction.getAmount().intValue() * 5 / 100)));
+	        userRepository.save(itdev);  
+	        
 	        User to = userRepository.findOneByLogin(walletUsdTransaction.getUsername()).get();
-	        to.setUsdAmount(to.getUsdAmount().add(walletUsdTransaction.getAmount()));
+	        to.setUsdAmount(to.getUsdAmount().add(totalTransfer));
 	        userRepository.save(to);
         }
         

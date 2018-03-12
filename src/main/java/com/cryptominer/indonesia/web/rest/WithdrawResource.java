@@ -1,14 +1,10 @@
 package com.cryptominer.indonesia.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.cryptominer.indonesia.domain.Withdraw;
+import java.math.BigDecimal;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
-import com.cryptominer.indonesia.repository.WithdrawRepository;
-import com.cryptominer.indonesia.security.SecurityUtils;
-import com.cryptominer.indonesia.web.rest.errors.BadRequestAlertException;
-import com.cryptominer.indonesia.web.rest.util.HeaderUtil;
-import com.cryptominer.indonesia.web.rest.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,13 +12,31 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import com.codahale.metrics.annotation.Timed;
+import com.cryptominer.indonesia.domain.User;
+import com.cryptominer.indonesia.domain.WalletBtcTransaction;
+import com.cryptominer.indonesia.domain.WalletUsdTransaction;
+import com.cryptominer.indonesia.domain.Withdraw;
+import com.cryptominer.indonesia.domain.enumeration.TransactionType;
+import com.cryptominer.indonesia.repository.UserRepository;
+import com.cryptominer.indonesia.repository.WalletBtcTransactionRepository;
+import com.cryptominer.indonesia.repository.WalletUsdTransactionRepository;
+import com.cryptominer.indonesia.repository.WithdrawRepository;
+import com.cryptominer.indonesia.security.SecurityUtils;
+import com.cryptominer.indonesia.web.rest.errors.BadRequestAlertException;
+import com.cryptominer.indonesia.web.rest.util.HeaderUtil;
+import com.cryptominer.indonesia.web.rest.util.PaginationUtil;
 
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing Withdraw.
@@ -36,9 +50,15 @@ public class WithdrawResource {
     private static final String ENTITY_NAME = "withdraw";
 
     private final WithdrawRepository withdrawRepository;
-
-    public WithdrawResource(WithdrawRepository withdrawRepository) {
+    private final UserRepository userRepository;
+    private final WalletUsdTransactionRepository walletUsdTransactionRepository;
+    private final WalletBtcTransactionRepository walletBtcTransactionRepository;
+    
+    public WithdrawResource(WithdrawRepository withdrawRepository, UserRepository userRepository, WalletUsdTransactionRepository walletUsdTransactionRepository, WalletBtcTransactionRepository walletBtcTransactionRepository) {
         this.withdrawRepository = withdrawRepository;
+        this.userRepository = userRepository;
+        this.walletUsdTransactionRepository = walletUsdTransactionRepository;
+        this.walletBtcTransactionRepository = walletBtcTransactionRepository;
     }
 
     /**
@@ -55,14 +75,66 @@ public class WithdrawResource {
         if (withdraw.getId() != null) {
             throw new BadRequestAlertException("A new withdraw cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        withdraw.setUsername(SecurityUtils.getCurrentUserLogin().get());
-        withdraw.setStatus("PENDING");
-        Withdraw result = withdrawRepository.save(withdraw);
-        return ResponseEntity.created(new URI("/api/withdraws/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        
+        //Withdraw (- current amount)
+        User u = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        
+        if(withdraw.getType().contentEquals("BTC")) {
+        		BigDecimal totalAmount = withdraw.getAmount().add(new BigDecimal("0.0005"));            
+        		u.setBtcAmount(u.getBtcAmount().subtract(totalAmount));
+	    		
+	   		if(u.getBtcAmount().intValue() < 0) {
+	   			 throw new BadRequestAlertException("Insufficient Amount", ENTITY_NAME, "insufficient");
+	        }
+	        else {        
+		        withdraw.setUsername(SecurityUtils.getCurrentUserLogin().get());
+		        withdraw.setStatus("PENDING");
+		        withdraw.setFee(new BigDecimal("0.0005"));
+		        
+		        WalletBtcTransaction wut = new WalletBtcTransaction();
+		        wut.setAmount(withdraw.getAmount());
+		        wut.setFee(new BigDecimal("0.0005"));
+		        wut.setUsername(SecurityUtils.getCurrentUserLogin().get());
+		        wut.setType(TransactionType.WITHDRAW);
+		        wut.setStatus("PENDING");	        
+		        walletBtcTransactionRepository.save(wut);
+		        
+		        userRepository.save(u);
+		        withdraw.setWalletBtcTransaction(walletBtcTransactionRepository.findOne(wut.getId()));
+		        withdrawRepository.save(withdraw);
+	        }
+        }
+        else if(withdraw.getType().contentEquals("USD")) {
+        		 BigDecimal totalAmount = withdraw.getAmount().add(new BigDecimal(withdraw.getAmount().intValue() * 5 / 100));
+        		 u.setUsdAmount(u.getUsdAmount().subtract(totalAmount)); //User -5%
+        		
+        		 if(u.getUsdAmount().intValue() < 0) {
+         		throw new BadRequestAlertException("Insufficient Amount", ENTITY_NAME, "insufficient");
+             }
+             else {        
+     	        withdraw.setUsername(SecurityUtils.getCurrentUserLogin().get());
+     	        withdraw.setStatus("PENDING");
+     	        withdraw.setFee(new BigDecimal(withdraw.getAmount().intValue() * 5 / 100));
+     	        
+     	        WalletUsdTransaction wut = new WalletUsdTransaction();
+     	        wut.setAmount(withdraw.getAmount());
+     	        wut.setFee(new BigDecimal(withdraw.getAmount().intValue() * 5 / 100));
+     	        wut.setUsername(SecurityUtils.getCurrentUserLogin().get());
+     	        wut.setType(TransactionType.WITHDRAW);
+     	        wut.setStatus("PENDING");	        
+     	        walletUsdTransactionRepository.save(wut);
+     	        
+     	        userRepository.save(u);
+     	        withdraw.setWalletUsdTransaction(walletUsdTransactionRepository.findOne(wut.getId()));
+     	        withdrawRepository.save(withdraw);
+             }
+        }
+        
+       
+        return ResponseEntity.ok().body(withdraw);
     }
 
+    
     /**
      * PUT  /withdraws : Updates an existing withdraw.
      *
@@ -79,7 +151,31 @@ public class WithdrawResource {
         if (withdraw.getId() == null) {
             return createWithdraw(withdraw);
         }
-        Withdraw result = withdrawRepository.save(withdraw);
+        
+        if(withdraw.getStatus().contentEquals("COMPLETE")) {
+        		withdraw.getWalletUsdTransaction().setStatus("COMPLETE");
+        		walletUsdTransactionRepository.save(withdraw.getWalletUsdTransaction());    
+        		
+        		 WalletUsdTransaction z = new WalletUsdTransaction();
+ 	         z.setAmount(new BigDecimal(withdraw.getAmount().intValue() * 1 / 100));
+ 	         z.setUsername("itdev");
+ 	         z.setType(TransactionType.FEE);
+ 	         z.setStatus("SUCCESS");
+ 	         walletUsdTransactionRepository.save(z);
+ 	        
+ 	         User itdev = userRepository.findOneByLogin("itdev").get();
+ 	         itdev.setUsdAmount(itdev.getUsdAmount().add(new BigDecimal(withdraw.getAmount().intValue() * 1 / 100)));
+ 	         userRepository.save(itdev);  
+        }
+        else if(withdraw.getStatus().contentEquals("REJECT")) {
+	    		withdraw.getWalletUsdTransaction().setStatus("REJECT");
+	    		walletUsdTransactionRepository.save(withdraw.getWalletUsdTransaction());       
+	    		
+	    		User u = userRepository.findOneByLogin(withdraw.getUsername()).get();
+	    		u.setUsdAmount(u.getUsdAmount().add(withdraw.getAmount().add(new BigDecimal(withdraw.getAmount().intValue() * 1 / 100))));
+	    		userRepository.save(u);
+        }
+        Withdraw result = withdrawRepository.save(withdraw);        
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, withdraw.getId().toString()))
             .body(result);

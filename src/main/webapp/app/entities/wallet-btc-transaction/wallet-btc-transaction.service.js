@@ -20,7 +20,9 @@
                     return data;
                 }
             },
-            'update': { method:'PUT' }
+            'update': { method:'PUT' },
+            'transfer': { method:'POST', url:'api/wallet-btc-transactions/transfer'},
+            'withdraw': { method:'POST', url:'api/wallet-btc-transactions/withdraw'},            
         });
     }
 })();

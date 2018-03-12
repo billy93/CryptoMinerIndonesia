@@ -58,6 +58,12 @@ public class WalletUsdTransactionResourceIntTest {
     private static final String DEFAULT_TXID = "AAAAAAAAAA";
     private static final String UPDATED_TXID = "BBBBBBBBBB";
 
+    private static final String DEFAULT_TO_USERNAME = "AAAAAAAAAA";
+    private static final String UPDATED_TO_USERNAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_STATUS = "BBBBBBBBBB";
+
     @Autowired
     private WalletUsdTransactionRepository walletUsdTransactionRepository;
 
@@ -106,7 +112,9 @@ public class WalletUsdTransactionResourceIntTest {
             .amount(DEFAULT_AMOUNT)
             .type(DEFAULT_TYPE)
             .fromUsername(DEFAULT_FROM_USERNAME)
-            .txid(DEFAULT_TXID);
+            .txid(DEFAULT_TXID)
+            .toUsername(DEFAULT_TO_USERNAME)
+            .status(DEFAULT_STATUS);
         return walletUsdTransaction;
     }
 
@@ -135,6 +143,8 @@ public class WalletUsdTransactionResourceIntTest {
         assertThat(testWalletUsdTransaction.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testWalletUsdTransaction.getFromUsername()).isEqualTo(DEFAULT_FROM_USERNAME);
         assertThat(testWalletUsdTransaction.getTxid()).isEqualTo(DEFAULT_TXID);
+        assertThat(testWalletUsdTransaction.getToUsername()).isEqualTo(DEFAULT_TO_USERNAME);
+        assertThat(testWalletUsdTransaction.getStatus()).isEqualTo(DEFAULT_STATUS);
     }
 
     @Test
@@ -189,7 +199,9 @@ public class WalletUsdTransactionResourceIntTest {
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].fromUsername").value(hasItem(DEFAULT_FROM_USERNAME.toString())))
-            .andExpect(jsonPath("$.[*].txid").value(hasItem(DEFAULT_TXID.toString())));
+            .andExpect(jsonPath("$.[*].txid").value(hasItem(DEFAULT_TXID.toString())))
+            .andExpect(jsonPath("$.[*].toUsername").value(hasItem(DEFAULT_TO_USERNAME.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
 
     @Test
@@ -207,7 +219,9 @@ public class WalletUsdTransactionResourceIntTest {
             .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.intValue()))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.fromUsername").value(DEFAULT_FROM_USERNAME.toString()))
-            .andExpect(jsonPath("$.txid").value(DEFAULT_TXID.toString()));
+            .andExpect(jsonPath("$.txid").value(DEFAULT_TXID.toString()))
+            .andExpect(jsonPath("$.toUsername").value(DEFAULT_TO_USERNAME.toString()))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
     }
 
     @Test
@@ -404,6 +418,84 @@ public class WalletUsdTransactionResourceIntTest {
         // Get all the walletUsdTransactionList where txid is null
         defaultWalletUsdTransactionShouldNotBeFound("txid.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllWalletUsdTransactionsByToUsernameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        walletUsdTransactionRepository.saveAndFlush(walletUsdTransaction);
+
+        // Get all the walletUsdTransactionList where toUsername equals to DEFAULT_TO_USERNAME
+        defaultWalletUsdTransactionShouldBeFound("toUsername.equals=" + DEFAULT_TO_USERNAME);
+
+        // Get all the walletUsdTransactionList where toUsername equals to UPDATED_TO_USERNAME
+        defaultWalletUsdTransactionShouldNotBeFound("toUsername.equals=" + UPDATED_TO_USERNAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletUsdTransactionsByToUsernameIsInShouldWork() throws Exception {
+        // Initialize the database
+        walletUsdTransactionRepository.saveAndFlush(walletUsdTransaction);
+
+        // Get all the walletUsdTransactionList where toUsername in DEFAULT_TO_USERNAME or UPDATED_TO_USERNAME
+        defaultWalletUsdTransactionShouldBeFound("toUsername.in=" + DEFAULT_TO_USERNAME + "," + UPDATED_TO_USERNAME);
+
+        // Get all the walletUsdTransactionList where toUsername equals to UPDATED_TO_USERNAME
+        defaultWalletUsdTransactionShouldNotBeFound("toUsername.in=" + UPDATED_TO_USERNAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletUsdTransactionsByToUsernameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        walletUsdTransactionRepository.saveAndFlush(walletUsdTransaction);
+
+        // Get all the walletUsdTransactionList where toUsername is not null
+        defaultWalletUsdTransactionShouldBeFound("toUsername.specified=true");
+
+        // Get all the walletUsdTransactionList where toUsername is null
+        defaultWalletUsdTransactionShouldNotBeFound("toUsername.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletUsdTransactionsByStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        walletUsdTransactionRepository.saveAndFlush(walletUsdTransaction);
+
+        // Get all the walletUsdTransactionList where status equals to DEFAULT_STATUS
+        defaultWalletUsdTransactionShouldBeFound("status.equals=" + DEFAULT_STATUS);
+
+        // Get all the walletUsdTransactionList where status equals to UPDATED_STATUS
+        defaultWalletUsdTransactionShouldNotBeFound("status.equals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletUsdTransactionsByStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        walletUsdTransactionRepository.saveAndFlush(walletUsdTransaction);
+
+        // Get all the walletUsdTransactionList where status in DEFAULT_STATUS or UPDATED_STATUS
+        defaultWalletUsdTransactionShouldBeFound("status.in=" + DEFAULT_STATUS + "," + UPDATED_STATUS);
+
+        // Get all the walletUsdTransactionList where status equals to UPDATED_STATUS
+        defaultWalletUsdTransactionShouldNotBeFound("status.in=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletUsdTransactionsByStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        walletUsdTransactionRepository.saveAndFlush(walletUsdTransaction);
+
+        // Get all the walletUsdTransactionList where status is not null
+        defaultWalletUsdTransactionShouldBeFound("status.specified=true");
+
+        // Get all the walletUsdTransactionList where status is null
+        defaultWalletUsdTransactionShouldNotBeFound("status.specified=false");
+    }
     /**
      * Executes the search, and checks that the default entity is returned
      */
@@ -416,7 +508,9 @@ public class WalletUsdTransactionResourceIntTest {
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].fromUsername").value(hasItem(DEFAULT_FROM_USERNAME.toString())))
-            .andExpect(jsonPath("$.[*].txid").value(hasItem(DEFAULT_TXID.toString())));
+            .andExpect(jsonPath("$.[*].txid").value(hasItem(DEFAULT_TXID.toString())))
+            .andExpect(jsonPath("$.[*].toUsername").value(hasItem(DEFAULT_TO_USERNAME.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
 
     /**
@@ -456,7 +550,9 @@ public class WalletUsdTransactionResourceIntTest {
             .amount(UPDATED_AMOUNT)
             .type(UPDATED_TYPE)
             .fromUsername(UPDATED_FROM_USERNAME)
-            .txid(UPDATED_TXID);
+            .txid(UPDATED_TXID)
+            .toUsername(UPDATED_TO_USERNAME)
+            .status(UPDATED_STATUS);
 
         restWalletUsdTransactionMockMvc.perform(put("/api/wallet-usd-transactions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -472,6 +568,8 @@ public class WalletUsdTransactionResourceIntTest {
         assertThat(testWalletUsdTransaction.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testWalletUsdTransaction.getFromUsername()).isEqualTo(UPDATED_FROM_USERNAME);
         assertThat(testWalletUsdTransaction.getTxid()).isEqualTo(UPDATED_TXID);
+        assertThat(testWalletUsdTransaction.getToUsername()).isEqualTo(UPDATED_TO_USERNAME);
+        assertThat(testWalletUsdTransaction.getStatus()).isEqualTo(UPDATED_STATUS);
     }
 
     @Test

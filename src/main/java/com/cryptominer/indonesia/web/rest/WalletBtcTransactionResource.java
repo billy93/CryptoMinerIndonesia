@@ -1,5 +1,6 @@
 package com.cryptominer.indonesia.web.rest;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.codahale.metrics.annotation.Timed;
 import com.cryptominer.indonesia.domain.User;
 import com.cryptominer.indonesia.domain.WalletBtcTransaction;
+import com.cryptominer.indonesia.domain.WalletUsdTransaction;
+import com.cryptominer.indonesia.domain.Withdraw;
 import com.cryptominer.indonesia.domain.enumeration.TransactionType;
 import com.cryptominer.indonesia.repository.UserRepository;
 import com.cryptominer.indonesia.security.SecurityUtils;
@@ -95,6 +98,67 @@ public class WalletBtcTransactionResource {
             .body(result);
     }
 
+    /**
+     * POST  /wallet-usd-transactions/transfer : Transfer.
+     *
+     * @param walletUsdTransaction the walletUsdTransaction to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new walletUsdTransaction, or with status 400 (Bad Request) if the walletUsdTransaction has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/wallet-btc-transactions/transfer")
+    @Timed
+    public ResponseEntity<WalletBtcTransaction> transfer(@Valid @RequestBody WalletBtcTransaction walletBtcTransaction) throws URISyntaxException {
+        log.debug("REST request to save walletBtcTransaction : {}", walletBtcTransaction);
+        if (walletBtcTransaction.getId() != null) {
+            throw new BadRequestAlertException("A new walletUsdTransaction cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        
+        BigDecimal totalTransfer = walletBtcTransaction.getAmount().add(new BigDecimal("0.0005"));
+	      
+        User from = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        from.setBtcAmount(from.getBtcAmount().subtract(totalTransfer));
+        if(from.getBtcAmount().doubleValue() < 0) {
+        		throw new BadRequestAlertException("Insufficient Amount", ENTITY_NAME, "insufficient");
+        }
+        else {
+	        userRepository.save(from);
+	        
+	        WalletBtcTransaction x = new WalletBtcTransaction();
+	        x.setAmount(walletBtcTransaction.getAmount());
+	        x.setFromUsername(SecurityUtils.getCurrentUserLogin().get());
+	        x.setUsername(walletBtcTransaction.getUsername());
+	        x.setType(TransactionType.DEPOSIT);
+	        x.setStatus("COMPLETE");
+	        walletBtcTransactionService.save(x);
+	        
+	        WalletBtcTransaction y = new WalletBtcTransaction();
+	        y.setAmount(walletBtcTransaction.getAmount());
+	        y.setUsername(SecurityUtils.getCurrentUserLogin().get());
+	        y.setToUsername(walletBtcTransaction.getUsername());
+	        y.setType(TransactionType.TRANSFER);
+	        y.setFee(new BigDecimal("0.0005"));
+	        y.setStatus("COMPLETE");
+	        walletBtcTransactionService.save(y);
+	        
+//	        WalletUsdTransaction z = new WalletUsdTransaction();
+//	        z.setAmount(new BigDecimal(walletBtcTransaction.getAmount().intValue() * 5 / 100));
+//	        z.setUsername("itdev");
+//	        z.setType(TransactionType.FEE);
+//	        z.setStatus("COMPLETE");
+//	        walletBtcTransactionService.save(z);
+	        
+//	        User itdev = userRepository.findOneByLogin("itdev").get();
+//	        itdev.setUsdAmount(itdev.getUsdAmount().add(new BigDecimal(walletUsdTransaction.getAmount().intValue() * 5 / 100)));
+//	        userRepository.save(itdev);  
+	        
+	        User to = userRepository.findOneByLogin(walletBtcTransaction.getUsername()).get();
+	        to.setBtcAmount(to.getBtcAmount().add(walletBtcTransaction.getAmount()));
+	        userRepository.save(to);
+        }
+        
+        return ResponseEntity.ok().body(walletBtcTransaction);
+    }
+    
     /**
      * PUT  /wallet-btc-transactions : Updates an existing walletBtcTransaction.
      *

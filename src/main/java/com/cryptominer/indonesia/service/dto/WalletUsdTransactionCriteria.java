@@ -45,6 +45,10 @@ public class WalletUsdTransactionCriteria implements Serializable {
 
     private StringFilter txid;
 
+    private StringFilter toUsername;
+
+    private StringFilter status;
+
     public WalletUsdTransactionCriteria() {
     }
 
@@ -96,6 +100,22 @@ public class WalletUsdTransactionCriteria implements Serializable {
         this.txid = txid;
     }
 
+    public StringFilter getToUsername() {
+        return toUsername;
+    }
+
+    public void setToUsername(StringFilter toUsername) {
+        this.toUsername = toUsername;
+    }
+
+    public StringFilter getStatus() {
+        return status;
+    }
+
+    public void setStatus(StringFilter status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "WalletUsdTransactionCriteria{" +
@@ -105,6 +125,8 @@ public class WalletUsdTransactionCriteria implements Serializable {
                 (type != null ? "type=" + type + ", " : "") +
                 (fromUsername != null ? "fromUsername=" + fromUsername + ", " : "") +
                 (txid != null ? "txid=" + txid + ", " : "") +
+                (toUsername != null ? "toUsername=" + toUsername + ", " : "") +
+                (status != null ? "status=" + status + ", " : "") +
             "}";
     }
 

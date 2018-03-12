@@ -89,6 +89,12 @@ public class WalletUsdTransactionQueryService extends QueryService<WalletUsdTran
             if (criteria.getTxid() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTxid(), WalletUsdTransaction_.txid));
             }
+            if (criteria.getToUsername() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getToUsername(), WalletUsdTransaction_.toUsername));
+            }
+            if (criteria.getStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getStatus(), WalletUsdTransaction_.status));
+            }
         }
         return specification;
     }

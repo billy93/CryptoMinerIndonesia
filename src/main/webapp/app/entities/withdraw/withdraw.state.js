@@ -118,6 +118,7 @@
                                 username: null,
                                 amount: null,
                                 status: null,
+                                fee: null,
                                 id: null
                             };
                         }
