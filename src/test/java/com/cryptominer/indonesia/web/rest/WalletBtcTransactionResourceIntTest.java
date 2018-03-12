@@ -86,7 +86,7 @@ public class WalletBtcTransactionResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final WalletBtcTransactionResource walletBtcTransactionResource = new WalletBtcTransactionResource(walletBtcTransactionService, walletBtcTransactionQueryService);
+        final WalletBtcTransactionResource walletBtcTransactionResource = new WalletBtcTransactionResource(walletBtcTransactionService, walletBtcTransactionQueryService, null);
         this.restWalletBtcTransactionMockMvc = MockMvcBuilders.standaloneSetup(walletBtcTransactionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

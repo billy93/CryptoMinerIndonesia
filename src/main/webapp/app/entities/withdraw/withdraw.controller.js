@@ -3,16 +3,14 @@
 
     angular
         .module('cryptoMinerIndonesiaApp')
-        .controller('WalletUsdTransactionController', WalletUsdTransactionController);
+        .controller('WithdrawController', WithdrawController);
 
-    WalletUsdTransactionController.$inject = ['$state', 'WalletUsdTransaction', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
+    WithdrawController.$inject = ['$state', 'Withdraw', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
 
-    function WalletUsdTransactionController($state, WalletUsdTransaction, Withdraw, ParseLinks, AlertService, paginationConstants, pagingParams) {
+    function WithdrawController($state, Withdraw, ParseLinks, AlertService, paginationConstants, pagingParams) {
 
         var vm = this;
 
-        vm.walletUsdTransaction = {};
-        vm.withdraw = {};
         vm.loadPage = loadPage;
         vm.predicate = pagingParams.predicate;
         vm.reverse = pagingParams.ascending;
@@ -21,32 +19,8 @@
 
         loadAll();
 
-        vm.transfer = function(){
-        		WalletUsdTransaction.transfer(vm.walletUsdTransaction, function(result){
-        			alert('Transfer Success');
-        		}, function(error){
-        			
-        		});
-        };
-        
-        vm.withdraw = function(){
-	    		Withdraw.save(vm.withdraw, function(result){
-	    			alert('Withdraw Success');
-	    		}, function(error){
-	    			
-	    		});        	
-        }
-        vm.changeAmount = function(){
-        		//console.log(vm.walletUsdTransaction.amount);
-         	vm.walletUsdTransaction.fee = parseInt(vm.walletUsdTransaction.amount) * 5 / 100;
-        }
-        vm.changeWithdrawAmount = function(){
-	    		//console.log(vm.walletUsdTransaction.amount);
-	     	vm.withdraw.fee = parseInt(vm.withdraw.amount) * 1 / 100;
-	    }
-        
         function loadAll () {
-            WalletUsdTransaction.query({
+            Withdraw.query({
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
                 sort: sort()
@@ -62,7 +36,7 @@
                 vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
-                vm.walletUsdTransactions = data;
+                vm.withdraws = data;
                 vm.page = pagingParams.page;
             }
             function onError(error) {

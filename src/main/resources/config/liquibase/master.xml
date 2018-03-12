@@ -9,6 +9,7 @@
     <include file="config/liquibase/changelog/20180213134808_added_entity_WalletBtcTransaction.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20180213134808_added_entity_WalletUsdTransaction.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20180226125642_added_entity_PackageCmi.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180309103633_added_entity_Withdraw.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

@@ -43,6 +43,9 @@ public class WalletUsdTransaction extends AbstractAuditingEntity implements Seri
     @Column(name = "description")
     private String description;
     
+    @Column(name = "status")
+    private String status;
+    
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -124,9 +127,19 @@ public class WalletUsdTransaction extends AbstractAuditingEntity implements Seri
     public void setDescription(String description) {
 		this.description = description;
 	}
+    
+    
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    @Override
+    public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

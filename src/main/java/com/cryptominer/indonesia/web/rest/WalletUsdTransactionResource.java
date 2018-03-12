@@ -5,12 +5,15 @@ import com.cryptominer.indonesia.domain.User;
 import com.cryptominer.indonesia.domain.WalletUsdTransaction;
 import com.cryptominer.indonesia.domain.enumeration.TransactionType;
 import com.cryptominer.indonesia.repository.UserRepository;
+import com.cryptominer.indonesia.security.SecurityUtils;
 import com.cryptominer.indonesia.service.WalletUsdTransactionService;
 import com.cryptominer.indonesia.web.rest.errors.BadRequestAlertException;
 import com.cryptominer.indonesia.web.rest.util.HeaderUtil;
 import com.cryptominer.indonesia.web.rest.util.PaginationUtil;
 import com.cryptominer.indonesia.service.dto.WalletUsdTransactionCriteria;
 import com.cryptominer.indonesia.service.WalletUsdTransactionQueryService;
+
+import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,6 +84,85 @@ public class WalletUsdTransactionResource {
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
+    
+    /**
+     * POST  /wallet-usd-transactions/transfer : Transfer.
+     *
+     * @param walletUsdTransaction the walletUsdTransaction to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new walletUsdTransaction, or with status 400 (Bad Request) if the walletUsdTransaction has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/wallet-usd-transactions/transfer")
+    @Timed
+    public ResponseEntity<WalletUsdTransaction> transfer(@Valid @RequestBody WalletUsdTransaction walletUsdTransaction) throws URISyntaxException {
+        log.debug("REST request to save WalletUsdTransaction : {}", walletUsdTransaction);
+        if (walletUsdTransaction.getId() != null) {
+            throw new BadRequestAlertException("A new walletUsdTransaction cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        
+        User from = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        from.setUsdAmount(from.getUsdAmount().subtract(walletUsdTransaction.getAmount()));
+        if(from.getUsdAmount().intValue() < 0) {
+        		throw new BadRequestAlertException("Insufficient Amount", ENTITY_NAME, "insufficient");
+        }
+        else {
+	        userRepository.save(from);
+	        
+	        WalletUsdTransaction x = new WalletUsdTransaction();
+	        x.setAmount(walletUsdTransaction.getAmount());
+//	        x.setFromUsername(SecurityUtils.getCurrentUserLogin().get());
+	        x.setUsername(walletUsdTransaction.getUsername());
+	        x.setType(TransactionType.TRANSFER);
+	        x.setCreatedBy(walletUsdTransaction.getUsername());
+	        x.setStatus("SUCCESS");
+	        walletUsdTransactionService.save(x);
+	        
+	        WalletUsdTransaction y = new WalletUsdTransaction();
+	        y.setAmount(walletUsdTransaction.getAmount());
+//	        y.setFromUsername(SecurityUtils.getCurrentUserLogin().get());
+	        y.setUsername(SecurityUtils.getCurrentUserLogin().get());
+	        y.setType(TransactionType.TRANSFER);
+	        y.setStatus("SUCCESS");
+	        walletUsdTransactionService.save(y);
+	        
+	        User to = userRepository.findOneByLogin(walletUsdTransaction.getUsername()).get();
+	        to.setUsdAmount(to.getUsdAmount().add(walletUsdTransaction.getAmount()));
+	        userRepository.save(to);
+        }
+        
+        return ResponseEntity.ok().body(walletUsdTransaction);
+    }
+    
+    /**
+     * POST  /wallet-usd-transactions/withdraw : Withdraw.
+     *
+     * @param walletUsdTransaction the walletUsdTransaction to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new walletUsdTransaction, or with status 400 (Bad Request) if the walletUsdTransaction has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/wallet-usd-transactions/withdraw")
+    @Timed
+    public ResponseEntity<WalletUsdTransaction> withdraw(@Valid @RequestBody WalletUsdTransaction walletUsdTransaction) throws URISyntaxException {
+        log.debug("REST request to save WalletUsdTransaction : {}", walletUsdTransaction);
+        if (walletUsdTransaction.getId() != null) {
+            throw new BadRequestAlertException("A new walletUsdTransaction cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        
+        //sender
+        User u = userRepository.findOneByLogin(walletUsdTransaction.getUsername()).get();
+        if(walletUsdTransaction.getType() == TransactionType.DEPOSIT) {
+        		u.setUsdAmount(u.getUsdAmount().add(walletUsdTransaction.getAmount()));
+        }
+        else if(walletUsdTransaction.getType() == TransactionType.WITHDRAW) {
+        		u.setUsdAmount(u.getUsdAmount().subtract(walletUsdTransaction.getAmount()));
+        }
+        userRepository.save(u);
+        
+        WalletUsdTransaction result = walletUsdTransactionService.save(walletUsdTransaction);
+        return ResponseEntity.created(new URI("/api/wallet-usd-transactions/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
 
     /**
      * PUT  /wallet-usd-transactions : Updates an existing walletUsdTransaction.
@@ -115,7 +197,14 @@ public class WalletUsdTransactionResource {
     @Timed
     public ResponseEntity<List<WalletUsdTransaction>> getAllWalletUsdTransactions(WalletUsdTransactionCriteria criteria, Pageable pageable) {
         log.debug("REST request to get WalletUsdTransactions by criteria: {}", criteria);
-        Page<WalletUsdTransaction> page = walletUsdTransactionQueryService.findByCriteria(criteria, pageable);
+        
+		Page<WalletUsdTransaction> page = walletUsdTransactionQueryService.findByCriteria(criteria, pageable);
+        if(!SecurityUtils.getCurrentUserLogin().get().contentEquals("admin")) {
+        		StringFilter filter = new StringFilter();
+        		filter.setEquals(SecurityUtils.getCurrentUserLogin().get());        	
+        		criteria.setUsername(filter);
+        		page = walletUsdTransactionQueryService.findByCriteria(criteria, pageable);
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/wallet-usd-transactions");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

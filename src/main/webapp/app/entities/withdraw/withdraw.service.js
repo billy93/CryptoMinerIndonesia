@@ -2,12 +2,12 @@
     'use strict';
     angular
         .module('cryptoMinerIndonesiaApp')
-        .factory('WalletUsdTransaction', WalletUsdTransaction);
+        .factory('Withdraw', Withdraw);
 
-    WalletUsdTransaction.$inject = ['$resource'];
+    Withdraw.$inject = ['$resource'];
 
-    function WalletUsdTransaction ($resource) {
-        var resourceUrl =  'api/wallet-usd-transactions/:id';
+    function Withdraw ($resource) {
+        var resourceUrl =  'api/withdraws/:id';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
@@ -20,9 +20,7 @@
                     return data;
                 }
             },
-            'update': { method:'PUT' },
-            'transfer': { method:'POST', url:'api/wallet-usd-transactions/transfer'},
-            'withdraw': { method:'POST', url:'api/wallet-usd-transactions/withdraw'},            
+            'update': { method:'PUT' }
         });
     }
 })();

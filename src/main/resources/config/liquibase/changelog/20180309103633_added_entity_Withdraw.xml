@@ -15,52 +15,28 @@
     <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
 
     <!--
-        Added the entity WalletBtcTransaction.
+        Added the entity Withdraw.
     -->
-    <changeSet id="20180213134808-1" author="jhipster">
-        <createTable tableName="wallet_btc_transaction">
+    <changeSet id="20180309103633-1" author="jhipster">
+        <createTable tableName="withdraw">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="username" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-			<column name="status" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-            <column name="description" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="amount" type="decimal(10,8)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="jhi_type" type="varchar(255)">
+            <column name="amount" type="decimal(10,2)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="from_username" type="varchar(255)">
+            <column name="status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="txid" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            
-            <column name="created_by" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="created_date" type="timestamp" defaultValueDate="${now}">
-                <constraints nullable="false"/>
-            </column>
-            <column name="last_modified_by" type="varchar(50)"/>
-            <column name="last_modified_date" type="timestamp"/>
-            
-			<column name="package_cmi_id" type="bigint">
-			                <constraints nullable="true" />
-			</column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
-        </createTable>      
+        </createTable>
+        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

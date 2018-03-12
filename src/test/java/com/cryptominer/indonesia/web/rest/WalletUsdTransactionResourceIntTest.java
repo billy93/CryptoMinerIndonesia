@@ -86,7 +86,7 @@ public class WalletUsdTransactionResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final WalletUsdTransactionResource walletUsdTransactionResource = new WalletUsdTransactionResource(walletUsdTransactionService, walletUsdTransactionQueryService);
+        final WalletUsdTransactionResource walletUsdTransactionResource = new WalletUsdTransactionResource(walletUsdTransactionService, walletUsdTransactionQueryService, null);
         this.restWalletUsdTransactionMockMvc = MockMvcBuilders.standaloneSetup(walletUsdTransactionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

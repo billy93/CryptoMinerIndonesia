@@ -39,6 +39,9 @@ public class WalletBtcTransaction extends AbstractAuditingEntity  implements Ser
 
     @Column(name = "txid")
     private String txid;
+    
+    @Column(name = "status")
+    private String status;
 
     @Column(name = "description")
     private String description;
@@ -135,9 +138,19 @@ public class WalletBtcTransaction extends AbstractAuditingEntity  implements Ser
     public void setDescription(String description) {
 		this.description = description;
 	}
+    
+    
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    @Override
+    public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
