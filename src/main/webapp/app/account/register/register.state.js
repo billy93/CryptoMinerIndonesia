@@ -10,10 +10,13 @@
     function stateConfig($stateProvider) {
         $stateProvider.state('register', {
             parent: 'account',
-            url: '/register',
+            url: '/register?ref',
             data: {
                 authorities: [],
                 pageTitle: 'Registration'
+            },
+            params: {
+                ref:'admin'
             },
             views: {
                 'content@': {

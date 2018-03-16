@@ -109,6 +109,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "photo_content_type")
     private String photoContentType;
     
+    @Column(name = "upline")
+    private String upline;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -348,6 +351,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
 	public void setAccountNumber(String accountNumber) {
 		this.accountNumber = accountNumber;
+	}
+	
+	public String getUpline() {
+		return upline;
+	}
+
+	public void setUpline(String upline) {
+		this.upline = upline;
 	}
 
 	@Override

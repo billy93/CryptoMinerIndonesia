@@ -2,7 +2,9 @@ package com.cryptominer.indonesia.service;
 
 import com.cryptominer.indonesia.domain.Authority;
 import com.cryptominer.indonesia.domain.User;
+import com.cryptominer.indonesia.domain.UserReferral;
 import com.cryptominer.indonesia.repository.AuthorityRepository;
+import com.cryptominer.indonesia.repository.UserReferralRepository;
 import com.cryptominer.indonesia.config.Constants;
 import com.cryptominer.indonesia.repository.UserRepository;
 import com.cryptominer.indonesia.security.AuthoritiesConstants;
@@ -35,17 +37,19 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final UserReferralRepository userReferralRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
 
     private final MailService mailService;
     
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, MailService mailService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, MailService mailService, UserReferralRepository userReferralRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.mailService = mailService;
+        this.userReferralRepository = userReferralRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -114,7 +118,13 @@ public class UserService {
         newUser.setPhoneNumber(userDTO.getPhoneNumber());
         newUser.setKtp(userDTO.getKtp());
         newUser.setKtpContentType(userDTO.getKtpContentType());
+        newUser.setUpline(userDTO.getUpline());
         userRepository.save(newUser);
+        
+        UserReferral userReferral = new UserReferral();
+        userReferral.setUsername(userDTO.getUpline());
+        userReferral.setReferral(userDTO.getLogin());
+        userReferralRepository.save(userReferral);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }

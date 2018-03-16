@@ -76,12 +76,22 @@ public class UserDTO {
 
     private String photoContentType;
     
+    private String upline;
+    
     private BigDecimal btcAmount;
     
     private BigDecimal usdAmount;
     
     
-    public BigDecimal getBtcAmount() {
+    public String getUpline() {
+		return upline;
+	}
+
+	public void setUpline(String upline) {
+		this.upline = upline;
+	}
+
+	public BigDecimal getBtcAmount() {
 		return btcAmount;
 	}
 

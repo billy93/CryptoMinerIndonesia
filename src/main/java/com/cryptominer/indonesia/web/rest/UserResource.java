@@ -1,20 +1,14 @@
 package com.cryptominer.indonesia.web.rest;
 
-import com.cryptominer.indonesia.config.Constants;
-import com.codahale.metrics.annotation.Timed;
-import com.cryptominer.indonesia.domain.User;
-import com.cryptominer.indonesia.repository.UserRepository;
-import com.cryptominer.indonesia.security.AuthoritiesConstants;
-import com.cryptominer.indonesia.service.MailService;
-import com.cryptominer.indonesia.service.UserService;
-import com.cryptominer.indonesia.service.dto.UserDTO;
-import com.cryptominer.indonesia.web.rest.errors.BadRequestAlertException;
-import com.cryptominer.indonesia.web.rest.errors.EmailAlreadyUsedException;
-import com.cryptominer.indonesia.web.rest.errors.LoginAlreadyUsedException;
-import com.cryptominer.indonesia.web.rest.util.HeaderUtil;
-import com.cryptominer.indonesia.web.rest.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
+import javax.validation.Valid;
+
+import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -23,12 +17,33 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import com.codahale.metrics.annotation.Timed;
+import com.cryptominer.indonesia.config.Constants;
+import com.cryptominer.indonesia.domain.User;
+import com.cryptominer.indonesia.domain.UserReferral;
+import com.cryptominer.indonesia.repository.UserReferralRepository;
+import com.cryptominer.indonesia.repository.UserRepository;
+import com.cryptominer.indonesia.security.AuthoritiesConstants;
+import com.cryptominer.indonesia.security.SecurityUtils;
+import com.cryptominer.indonesia.service.MailService;
+import com.cryptominer.indonesia.service.UserService;
+import com.cryptominer.indonesia.service.dto.UserDTO;
+import com.cryptominer.indonesia.web.rest.errors.BadRequestAlertException;
+import com.cryptominer.indonesia.web.rest.errors.EmailAlreadyUsedException;
+import com.cryptominer.indonesia.web.rest.errors.LoginAlreadyUsedException;
+import com.cryptominer.indonesia.web.rest.util.HeaderUtil;
+import com.cryptominer.indonesia.web.rest.util.PaginationUtil;
+
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing users.
@@ -66,11 +81,14 @@ public class UserResource {
 
     private final MailService mailService;
 
-    public UserResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    private final UserReferralRepository userReferralRepository;
+    
+    public UserResource(UserRepository userRepository, UserService userService, MailService mailService, UserReferralRepository userReferralRepository) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.userReferralRepository = userReferralRepository;
     }
 
     /**
@@ -147,7 +165,80 @@ public class UserResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+    
+    /**
+     * GET /users/referral : get all users referral.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and with body all users
+     */
+    @GetMapping("/users/referral")
+    @Timed
+    public ResponseEntity<List<UserRef>> getAllUserReferrals() {
+    		
+    		List<UserRef> userRefs = new ArrayList<UserResource.UserRef>();
+		UserRef userRef = new UserRef();
+		userRef.name = SecurityUtils.getCurrentUserLogin().get();   
+		
+    		List<UserReferral> userReferrals = userReferralRepository.findAllByUsername(SecurityUtils.getCurrentUserLogin().get());
+        for(UserReferral ur : userReferrals) {
+        		UserRef userRef1 = new UserRef();
+        		userRef1.name = ur.getReferral();
+    			userRef.children.add(userRef1);
+        }
+        
+    		/*
+    		List<UserRef> userRefs = new ArrayList<UserResource.UserRef>();
+    		UserRef userRef = new UserRef();
+    		userRef.name = "test1";    		
+	    		List<UserRef> userRefs1 = new ArrayList<>();
+	    		UserRef userRef1 = new UserRef();
+	    		userRef1.name = "test2";
+	    		userRefs1.add(userRef1);
+	    		userRef.children = userRefs1;    		
+    		userRefs.add(userRef);
+    		*/
+    		
+        userRefs.add(userRef);
+    		return new ResponseEntity<>(userRefs, null, HttpStatus.OK);
+    }
 
+    /**
+     * GET /users/referral : get all users referral.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and with body all users
+     */
+    @GetMapping("/users/referral/{username}")
+    @Timed
+    public ResponseEntity<List<UserRef>> getUserReferrals(@PathVariable String username) {
+    		List<UserRef> userRefs = new ArrayList<>();
+    		List<UserReferral> userReferrals = userReferralRepository.findAllByUsername(username);
+        for(UserReferral ur : userReferrals) {
+        		UserRef userRef1 = new UserRef();
+        		userRef1.name = ur.getReferral();
+        		userRefs.add(userRef1);
+        }        
+    		return new ResponseEntity<>(userRefs, null, HttpStatus.OK);
+    }
+    
+    private class UserRef{
+	    private String name;
+	    private List<UserRef> children = new ArrayList<>();
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public List<UserRef> getChildren() {
+			return children;
+		}
+		public void setChildren(List<UserRef> children) {
+			this.children = children;
+		}
+    }
+    
     /**
      * @return a string list of the all of the roles
      */

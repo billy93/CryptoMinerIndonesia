@@ -17,6 +17,16 @@
                     return data;
                 }
             },
+            'referral': {
+                method: 'GET',
+                url: 'api/users/referral',
+                isArray: true
+            },     
+            'getReferral': {
+            		method: 'GET',
+                url: 'api/users/referral/:username',
+                isArray: true
+            },
             'save': { method:'POST' },
             'update': { method:'PUT' },
             'delete':{ method:'DELETE'}

@@ -6,9 +6,9 @@
         .controller('RegisterController', RegisterController);
 
 
-    RegisterController.$inject = [ '$timeout', '$scope', 'Auth', 'LoginService', 'errorConstants', 'DataUtils'];
+    RegisterController.$inject = [ '$timeout', '$scope', '$stateParams', 'Auth', 'LoginService', 'errorConstants', 'DataUtils'];
 
-    function RegisterController ($timeout, $scope, Auth, LoginService, errorConstants, DataUtils) {
+    function RegisterController ($timeout, $scope, $stateParams, Auth, LoginService, errorConstants, DataUtils) {
         var vm = this;
 
         vm.doNotMatch = null;
@@ -19,6 +19,7 @@
         vm.registerAccount = {};
         vm.success = null;
         vm.pattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]/;
+        vm.registerAccount.upline = $stateParams.ref;
         
         $timeout(function (){angular.element('#login').focus();});
 

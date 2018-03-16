@@ -26,6 +26,11 @@
         <div class="col-md-8 col-md-offset-2">
             <form ng-show="!vm.success" name="form" role="form" novalidate ng-submit="vm.register()" show-validation>
 
+ 				<div class="form-group">
+                    <label class="control-label" for="login">Referral</label>
+                    <input type="text" class="form-control" id="login" name="login" placeholder="Your reff" disabled
+                           ng-model="vm.registerAccount.upline" required>
+                </div>
                 <div class="form-group">
                     <label class="control-label" for="login">Username</label>
                     <input type="text" class="form-control" id="login" name="login" placeholder="Your username"

@@ -5,9 +5,9 @@
         .module('cryptoMinerIndonesiaApp')
         .controller('WithdrawController', WithdrawController);
 
-    WithdrawController.$inject = ['$state', 'Withdraw', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
+    WithdrawController.$inject = ['$scope', '$state', 'Withdraw', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
 
-    function WithdrawController($state, Withdraw, ParseLinks, AlertService, paginationConstants, pagingParams) {
+    function WithdrawController($scope, $state, Withdraw, ParseLinks, AlertService, paginationConstants, pagingParams) {
 
         var vm = this;
 
@@ -16,7 +16,6 @@
         vm.reverse = pagingParams.ascending;
         vm.transition = transition;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
-
         loadAll();
 
         function loadAll () {

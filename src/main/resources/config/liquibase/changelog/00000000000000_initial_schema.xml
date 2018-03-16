@@ -28,7 +28,8 @@
             <column name="email" type="varchar(100)">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_email"/>
             </column>
-            
+             <column name="upline" type="varchar(50)">
+            </column>
             <column name="identity_number" type="varchar(100)"/>
             <column name="btc_wallet" type="varchar(100)"/>
             <column name="bank" type="varchar(100)"/>

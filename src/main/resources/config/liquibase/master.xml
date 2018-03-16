@@ -10,6 +10,7 @@
     <include file="config/liquibase/changelog/20180213134808_added_entity_WalletUsdTransaction.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20180226125642_added_entity_PackageCmi.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20180309103633_added_entity_Withdraw.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180314103699_added_entity_UserReferral.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20180309103633_added_entity_constraints_Withdraw.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
