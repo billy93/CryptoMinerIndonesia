@@ -3,22 +3,39 @@
 
     angular
         .module('cryptoMinerIndonesiaApp')
-        .controller('SettingsController', SettingsController);
+        .controller('GoogleAuthDialogController', GoogleAuthDialogController);
 
-    SettingsController.$inject = ['Principal', 'Auth'];
+    GoogleAuthDialogController.$inject = ['Principal', 'Auth', 'User', '$uibModalInstance'];
 
-    function SettingsController (Principal, Auth) {
+    function GoogleAuthDialogController (Principal, Auth, User, $uibModalInstance) {
         var vm = this;
 
         vm.error = null;
         vm.save = save;
         vm.settingsAccount = null;
         vm.success = null;
-
-        vm.changeSettings = function(){
-        	
+        vm.gauth = {};
+    	
+        vm.clear = clear;
+        function clear () {
+            $uibModalInstance.dismiss('cancel');
         }
         
+        vm.disableGauth = function(){
+        	vm.gauth.type = 'disable';
+        	User.gauth(vm.gauth, function(result){
+        	    alert('Success disabled');
+                
+        	})
+        }
+        
+        vm.enableGauth = function(){
+        	vm.gauth.type = 'enable';
+        	User.gauth(vm.gauth, function(result){
+        	    alert('Success enabled');
+                
+        	})
+        }
         /**
          * Store the "settings account" in a separate variable, and not in the shared "account" variable.
          */
@@ -30,12 +47,12 @@
                 langKey: account.langKey,
                 lastName: account.lastName,
                 login: account.login,
-                enabled: account.enabled                
+                enabled: account.enabled,
+                secret: account.secret
             };
         };
 
         Principal.identity().then(function(account) {
-        	console.log(account);
             vm.settingsAccount = copyAccount(account);
         });
 

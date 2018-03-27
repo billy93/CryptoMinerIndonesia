@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.jboss.aerogear.security.otp.Totp;
 import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -277,5 +279,102 @@ public class UserResource {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUser(login);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert( "A user is deleted with identifier " + login, login)).build();
+    }
+    
+    /**
+     * POST  /users/gauth  : Enable/Disable gauth user.
+     * <p>
+     * Creates a new user if the login and email are not already used, and sends an
+     * mail with an activation link.
+     * The user needs to be activated on creation.
+     *
+     * @param userDTO the user to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new user, or with status 400 (Bad Request) if the login or email is already in use
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @throws BadRequestAlertException 400 (Bad Request) if the login or email is already in use
+     */
+    @PostMapping("/users/gauth")
+    @Timed
+    public ResponseEntity<User> gauth(@RequestBody Gauth gauth) throws URISyntaxException {
+        log.debug("REST request to enable/disable Gauth : {}", gauth);
+
+        if (gauth.getType().contentEquals("disable")) {
+            if(gauth.getCode() == null) {
+            	throw new BadRequestAlertException("A gauth code cannot be blank", "userManagement", "idexists");
+            }
+            else {
+            	User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+                final Totp totp = new Totp(user.getSecret());
+                if (!isValidLong(gauth.getCode()) || !totp.verify(gauth.getCode())) {
+                    throw new BadCredentialsException("Invalid verfication code");
+                }
+                else {
+                	user.setEnabled(false);
+                	userRepository.save(user);
+                }
+            }
+            // Lowercase the user login before comparing with database
+        } else if (gauth.getType().contentEquals("enable")) {
+            if(gauth.getCode() == null) {
+            	throw new BadRequestAlertException("A gauth code cannot be blank", "userManagement", "idexists");
+            }
+            else {
+            	User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+                final Totp totp = new Totp(user.getSecret());
+                if (!isValidLong(gauth.getCode()) || !totp.verify(gauth.getCode())) {
+                    throw new BadCredentialsException("Invalid verfication code");
+                }
+                else {
+                	user.setEnabled(true);
+                	userRepository.save(user);
+                }
+            }
+            // Lowercase the user login before comparing with database
+        } 
+        /*else if (userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
+            throw new LoginAlreadyUsedException();
+        } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
+            throw new EmailAlreadyUsedException();
+        } else {
+            User newUser = userService.createUser(userDTO);
+            mailService.sendCreationEmail(newUser);
+            return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
+                .headers(HeaderUtil.createAlert( "A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))
+                .body(newUser);
+        }*/
+        
+        return ResponseEntity.ok().build();
+    }
+    
+    private boolean isValidLong(String code) {
+        try {
+            Long.parseLong(code);
+        } catch (final NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+    
+    public static class Gauth{
+    	private String code;
+    	private String type;
+    	
+    	public Gauth() {
+			// TODO Auto-generated constructor stub
+		}
+		public String getCode() {
+			return code;
+		}
+		public void setCode(String code) {
+			this.code = code;
+		}
+		public String getType() {
+			return type;
+		}
+		public void setType(String type) {
+			this.type = type;
+		}
+    	
+    	
     }
 }

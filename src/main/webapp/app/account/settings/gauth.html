@@ -1,0 +1,61 @@
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myUserLabel">
+            Edit Google Authenticator</h4>
+    </div>
+    <div class="modal-body" style="height: 411px !important;">
+        <jhi-alert-error></jhi-alert-error>
+        
+        <form>
+			<div class="control-group" style="text-align: center;" ng-if="vm.settingsAccount.enabled">
+				<div style="width: 78px; height: 78px; background: url(content/images/2fa-icon-ga2_61.png) no-repeat; margin: 20px auto"></div>
+				<p style="font-size: 19px; margin-top: -18px;">Google Authenticator is enabled on your account</p>
+				<p style="margin-bottom: 50px;">In order to change your authentication method, you have to disable Google 2FA on your account</p>
+				<hr>
+				<label class="control-label" for="otp_code" style="margin-top: 30px; font-size: 15px; -moz-user-select: none; -webkit-user-select: none; font-weight: bold;" onclick="$('#google_auth #otp_code').focus();">Enter 2FA code to disable Google Authenticator:</label>
+				<div class="controls">
+				<input type="text" ng-model='vm.gauth.code' class="googleauth_input" id="otp_code" name="otp_code" rel="popover" autocomplete="off" maxlength="11" placeholder="" autofocus="">
+				</div>
+			</div>
+
+			<div class="control-group" style="text-align: center;" ng-if="!vm.settingsAccount.enabled">
+				<div class="c">
+					<ol class="googleauth-bullets">
+					<li><label for="googleauth_code_backup">Download 2FA backup key:</label></li>
+					<li>Download and install:</li>
+					<li>Scan QR:</li>
+					</ol>
+					<div class="apps">
+					<a href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8" target="_blank"><img src="content/images/appstore-m.png" width="162" height="55" border="0" alt="Download on AppStore"></a>
+					<a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_blank"><img src="content/images/play-m.png" width="161" height="55" border="0" alt="Download on Google Play"></a>
+					</div>
+					<div class="code-backup">
+					<input id="googleauth_code_backup" type="text" name="otp_key" ng-model="vm.settingsAccount.secret">
+					<a href="/g" target="_self" class="download-backup-code"></a>
+					</div>
+					<div id="security_pages_qrcode" title="otpauth://totp/up119394292@cex.io?secret=NNAH23TNJBWESXSLLI4T6MLIJ47DCSKX"><canvas width="160" height="160" style="display: none;"></canvas><img src="data:image/png;base64,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" style="display: block;"></div>
+					<div class="code-otp">
+					<label for="googleauth_otp_code">Enter 2FA code from the app:</label>
+					<br/><br/>
+					<input id="googleauth_otp_code" type="otp_code" name="otp_code" ng-model="vm.gauth.code" autocomplete="off" maxlength="11" autofocus="">
+					</div>
+				</div>
+			</div>			
+		</form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+           >Cancel</span>
+        </button>
+        <button type="submit" ng-if="vm.settingsAccount.enabled" ng-click="vm.disableGauth()" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Disable</span>
+        </button>
+        <button type="submit" ng-if="!vm.settingsAccount.enabled" ng-click="vm.enableGauth()" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Enable 2FA</span>
+        </button>
+    </div>
+</form>

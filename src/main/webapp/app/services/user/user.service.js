@@ -27,6 +27,10 @@
                 url: 'api/users/referral/:username',
                 isArray: true
             },
+            'gauth': {
+            	url: 'api/users/gauth',
+            	method: 'POST'
+            },
             'save': { method:'POST' },
             'update': { method:'PUT' },
             'delete':{ method:'DELETE'}

@@ -82,8 +82,29 @@ public class UserDTO {
     
     private BigDecimal usdAmount;
     
+    private boolean enabled;
+
+    private String secret;
     
-    public String getUpline() {
+    
+    
+    public String getSecret() {
+		return secret;
+	}
+
+	public void setSecret(String secret) {
+		this.secret = secret;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public String getUpline() {
 		return upline;
 	}
 
@@ -178,6 +199,8 @@ public class UserDTO {
         this.lastModifiedDate = user.getLastModifiedDate();
         this.btcAmount = user.getBtcAmount();
         this.usdAmount = user.getUsdAmount();
+        this.secret = user.getSecret();
+        this.enabled = user.isEnabled();
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());

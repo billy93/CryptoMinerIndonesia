@@ -9,72 +9,139 @@
 
            <jhi-alert-error></jhi-alert-error>
 
-            <form name="form" role="form" novalidate ng-submit="vm.save()" show-validation>
-
-                <div class="form-group">
-                    <label class="control-label" for="firstName">First Name</label>
-                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Your first name"
-                           ng-model="vm.settingsAccount.firstName" ng-minlength=1 ng-maxlength=50 required maxlength="50">
-                    <div ng-show="form.firstName.$dirty && form.firstName.$invalid">
-                        <p class="help-block"
-                               ng-show="form.firstName.$error.required">
-                            Your first name is required.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.firstName.$error.minlength">
-                            Your first name is required to be at least 1 character.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.firstName.$error.maxlength">
-                            Your first name cannot be longer than 50 characters.
-                        </p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="lastName">Last Name</label>
-                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Your last name"
-                           ng-model="vm.settingsAccount.lastName" ng-minlength=1 ng-maxlength=50 required maxlength="50">
-                    <div ng-show="form.lastName.$dirty && form.lastName.$invalid">
-                        <p class="help-block"
-                               ng-show="form.lastName.$error.required">
-                            Your last name is required.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.lastName.$error.minlength">
-                            Your last name is required to be at least 1 character.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.lastName.$error.maxlength">
-                            Your last name cannot be longer than 50 characters.
-                        </p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Your email"
-                           ng-model="vm.settingsAccount.email" ng-minlength=5 ng-maxlength=100 required maxlength="100">
-                    <div ng-show="form.email.$dirty && form.email.$invalid">
-                        <p class="help-block"
-                               ng-show="form.email.$error.required">
-                            Your email is required.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.email.$error.email">
-                            Your email is invalid.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.email.$error.minlength">
-                            Your email is required to be at least 5 characters.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.email.$error.maxlength">
-                            Your email cannot be longer than 100 characters.
-                        </p>
-                    </div>
-                </div>
-
-                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary">Save</button>
-            </form>
+		    <uib-tabset active="tabs">
+				<uib-tab index="0" heading="General">
+		
+		            <form name="form" role="form" novalidate ng-submit="vm.save()" show-validation>
+		
+		                <div class="form-group">
+		                    <label class="control-label" for="firstName">First Name</label>
+		                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Your first name"
+		                           ng-model="vm.settingsAccount.firstName" ng-minlength=1 ng-maxlength=50 required maxlength="50">
+		                    <div ng-show="form.firstName.$dirty && form.firstName.$invalid">
+		                        <p class="help-block"
+		                               ng-show="form.firstName.$error.required">
+		                            Your first name is required.
+		                        </p>
+		                        <p class="help-block"
+		                               ng-show="form.firstName.$error.minlength">
+		                            Your first name is required to be at least 1 character.
+		                        </p>
+		                        <p class="help-block"
+		                               ng-show="form.firstName.$error.maxlength">
+		                            Your first name cannot be longer than 50 characters.
+		                        </p>
+		                    </div>
+		                </div>
+		                <div class="form-group">
+		                    <label class="control-label" for="lastName">Last Name</label>
+		                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Your last name"
+		                           ng-model="vm.settingsAccount.lastName" ng-minlength=1 ng-maxlength=50 required maxlength="50">
+		                    <div ng-show="form.lastName.$dirty && form.lastName.$invalid">
+		                        <p class="help-block"
+		                               ng-show="form.lastName.$error.required">
+		                            Your last name is required.
+		                        </p>
+		                        <p class="help-block"
+		                               ng-show="form.lastName.$error.minlength">
+		                            Your last name is required to be at least 1 character.
+		                        </p>
+		                        <p class="help-block"
+		                               ng-show="form.lastName.$error.maxlength">
+		                            Your last name cannot be longer than 50 characters.
+		                        </p>
+		                    </div>
+		                </div>
+		                <div class="form-group">
+		                    <label class="control-label" for="email">Email</label>
+		                    <input type="email" class="form-control" id="email" name="email" placeholder="Your email"
+		                           ng-model="vm.settingsAccount.email" ng-minlength=5 ng-maxlength=100 required maxlength="100">
+		                    <div ng-show="form.email.$dirty && form.email.$invalid">
+		                        <p class="help-block"
+		                               ng-show="form.email.$error.required">
+		                            Your email is required.
+		                        </p>
+		                        <p class="help-block"
+		                               ng-show="form.email.$error.email">
+		                            Your email is invalid.
+		                        </p>
+		                        <p class="help-block"
+		                               ng-show="form.email.$error.minlength">
+		                            Your email is required to be at least 5 characters.
+		                        </p>
+		                        <p class="help-block"
+		                               ng-show="form.email.$error.maxlength">
+		                            Your email cannot be longer than 100 characters.
+		                        </p>
+		                    </div>
+		                </div>
+		
+		                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary">Save</button>
+		            </form>
+		        
+		        </uib-tab>
+		        <uib-tab index="1" heading="Security">
+		        	
+		        	<section class="panel" style="background: #eeeeee; padding: 0; padding-bottom: 50px">
+					<header ng-if="vm.settingsAccount.enabled" class="panel-heading pull-in text-center" style="background: #28445f; border-bottom: 8px solid #16bcc9; color: #fff; margin: -1px">
+						<b>2FA Status: Enabled</b>
+					</header>
+					<header ng-if="!vm.settingsAccount.enabled" class="panel-heading pull-in text-center" style="background: #c42b26 url(/img/2fa-warn.png); color: #fff; margin: -1px">
+						<b>2FA is not activated!</b>
+					</header>
+					
+					
+					<div ng-if='vm.settingsAccount.enabled'>
+						<div class="row-fluid" style="background: #fff; padding: 10px 10px 10px 10px;">
+						
+						<div class="span3">
+							<p>
+							<b style="font-size: 24px; font-weight: normal; color: #000; line-height: 26px">Your account<br>is secure.</b>
+							<br><br>
+							Two-Factor Authentication (2FA) is enabled on your account.<br><br>
+							
+							Your personal data and funds are protected. If you lose access to your 2FA, please notify us at <a href="mailto:support@cryptominerindonesia.com">support@cryptominerindonesia.com</a>.
+							
+							</p>
+						</div>
+						
+						<div class="span8"><img src="../content/images/2fa-ga.png" style="display:block; margin-left: auto; margin-right:auto"></div>
+						
+						</div>
+					</div>
+					
+					<div ng-if='!vm.settingsAccount.enabled'>
+						<div class="row-fluid" style="background-image: -moz-linear-gradient(bottom, #c3c3c5 0%, #efefef 100%); background-image: -o-linear-gradient(bottom, #c3c3c5 0%, #efefef 100%); background-image: -webkit-linear-gradient(bottom, #c3c3c5 0%, #efefef 100%); background-image: linear-gradient(bottom, #c3c3c5 0%, #efefef 100%); padding: 10px 10px 10px 10px;">
+						<div class="span3">
+						<p style="padding-right: 20%">
+						<b style="font-size: 24px; font-weight: normal">Warning!</b>
+						<br><br>
+						Your account is not secure, hence it can be easily hacked. We highly recommend you to activate Two-Factor Authentication, which will provide maximum protection to your financial assets!
+						</p>
+						</div>
+						<div class="span8"><img src="../content/images/2fa-off.png" style="display:block; margin-left: auto; margin-right:auto;"></div>
+						</div>
+					</div>
+					
+					<div class="pull-in text-center">
+					<a role="button" ng-if="vm.settingsAccount.enabled" ui-sref="settings.2fa" class="btn btn-blue btn-small btn-0s Modal2fa" style="width: 150px; zoom: 1.5; margin-bottom: 25px; position: relative; margin-top: -15px">Edit settings</a>
+					<a role="button" ng-if="!vm.settingsAccount.enabled" ui-sref="settings.2fa" class="btn btn-blue btn-small btn-0s Modal2fa" style="width: 150px; zoom: 1.5; margin-bottom: 25px; position: relative; margin-top: -15px">Enable 2FA</a>
+					
+					
+					<p><b>Two-Factor Authentication (2FA)</b><br>is the most advanced security system, which adds an extra protection to your account, preventing unauthorized access.</p>
+					</div>
+					<div class="pull-in text-center">
+					<img src="../content/images/2fa-is.png" style="margin: 20px 0; max-width: 630px; width: 75%">
+					</div>
+					<div class="row-fluid" style="width: 640px; margin: 0 auto">
+					<div class="span4">Enter your cryptominerindonesia username and password as usual.</div>
+					<div class="span4">Then, you'll be asked for a code from a mobile app.</div>
+					<div class="span4">Congratulations! You are successfully logged in to your account.</div>
+					</div>
+					</section>
+					
+		        </uib-tab>
+		     </uib-tabset>
         </div>
     </div>
 

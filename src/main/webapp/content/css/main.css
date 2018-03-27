@@ -337,6 +337,81 @@ ui bootstrap tweaks
 }
 
 
+.btn-blue {
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5aa1d8), color-stop(100%, #2489d6));
+    background-image: -webkit-linear-gradient(#5aa1d8, #2489d6);
+    background-image: -moz-linear-gradient(#5aa1d8, #2489d6);
+    background-image: -o-linear-gradient(#5aa1d8, #2489d6);
+    background-image: linear-gradient(#5aa1d8, #2489d6);
+    -pie-background: linear-gradient(#5aa1d8, #2489d6);
+    border: 1px solid #258cda;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -o-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    border-radius: 3px;
+    -moz-box-shadow: inset 0 1px 0 0 #85b9e0;
+    -webkit-box-shadow: inset 0 1px 0 0 #85b9e0;
+    -o-box-shadow: inset 0 1px 0 0 #85b9e0;
+    box-shadow: inset 0 1px 0 0 #85b9e0;
+    color: #fff !important;
+    text-shadow: 0 1px 0 #1976be;
+    position: relative;
+}
 
+.googleauth-bullets li {
+    top: -23px;
+    line-height: 74px;
+    position: relative;
+    text-align: left;
+    padding-left: 50px;
+}
 
+.googleauth-bullets {
+    background: transparent url(../images/2fa-googleauth-bullets.png) left top no-repeat;
+    width: 300px;
+    height: 276px;
+    list-style: none;
+}
+
+.apps {
+    position: absolute;
+    top: 89px;
+    left: 225px;
+    width: 400px;
+}
+
+#security_pages_qrcode {
+    position: absolute;
+    top: 220px;
+    left: 97px;
+}
+
+.code-backup {
+	position: absolute;
+    top: 40px;
+    right: 174px;
+}
+
+.code-backup input {
+    background: #f4f4f5;
+    border: 1px solid #e0e0e1;
+    border-radius: 0px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    width: 318px;
+    height: 35px;
+    text-align: center;
+    padding: 0px 0px;
+}
+
+.code-otp {
+        position: absolute;
+    top: 263px;
+    left: 202px;
+    background: transparent url(content/images/2fa-googleauth-input.png) no-repeat left top;
+    width: 449px;
+    height: 41px;
+}
 /* jhipster-needle-css-add-main JHipster will add new css style */

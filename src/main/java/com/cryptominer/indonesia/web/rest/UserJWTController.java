@@ -1,28 +1,28 @@
 package com.cryptominer.indonesia.web.rest;
 
-import com.cryptominer.indonesia.domain.User;
-import com.cryptominer.indonesia.repository.UserRepository;
-import com.cryptominer.indonesia.security.jwt.JWTConfigurer;
-import com.cryptominer.indonesia.security.jwt.TokenProvider;
-import com.cryptominer.indonesia.web.rest.errors.InternalServerErrorException;
-import com.cryptominer.indonesia.web.rest.vm.LoginVM;
+import javax.validation.Valid;
 
-import com.codahale.metrics.annotation.Timed;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.springframework.http.HttpStatus;
-import org.baeldung.security.google2fa.CustomWebAuthenticationDetails;
 import org.jboss.aerogear.security.otp.Totp;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import com.codahale.metrics.annotation.Timed;
+import com.cryptominer.indonesia.domain.User;
+import com.cryptominer.indonesia.repository.UserRepository;
+import com.cryptominer.indonesia.security.jwt.JWTConfigurer;
+import com.cryptominer.indonesia.security.jwt.TokenProvider;
+import com.cryptominer.indonesia.web.rest.vm.LoginVM;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Controller to authenticate users.
@@ -59,9 +59,11 @@ public class UserJWTController {
         String verificationCode = loginVM.getGauth();
         
         User user = userRepository.findOneByLogin(loginVM.getUsername()).get();
-        final Totp totp = new Totp(user.getSecret());
-        if (!isValidLong(verificationCode) || !totp.verify(verificationCode)) {
-            throw new BadCredentialsException("Invalid verfication code");
+        if(user.isEnabled()) {
+	        final Totp totp = new Totp(user.getSecret());
+	        if (!isValidLong(verificationCode) || !totp.verify(verificationCode)) {
+	            throw new BadCredentialsException("Invalid verfication code");
+	        }
         }
         /*
         if(gauthCode.contentEquals("1234")) {
