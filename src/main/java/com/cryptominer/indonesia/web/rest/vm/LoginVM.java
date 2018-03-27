@@ -18,7 +18,18 @@ public class LoginVM {
 
     private Boolean rememberMe;
 
-    public String getUsername() {
+    private String gauth;
+    
+    
+    public String getGauth() {
+		return gauth;
+	}
+
+	public void setGauth(String gauth) {
+		this.gauth = gauth;
+	}
+
+	public String getUsername() {
         return username;
     }
 

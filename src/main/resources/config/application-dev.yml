@@ -33,8 +33,8 @@ spring:
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mysql://localhost:3306/CryptoMinerIndonesia?useUnicode=true&characterEncoding=utf8&useSSL=false
-        username: bc546977a39e60
-        password: 1b1275b2
+        username: root
+        password: P@ssw0rd!
         hikari:
             data-source-properties:
                 cachePrepStmts: true

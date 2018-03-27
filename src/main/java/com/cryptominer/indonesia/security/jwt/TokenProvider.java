@@ -1,13 +1,18 @@
 package com.cryptominer.indonesia.security.jwt;
 
-import io.github.jhipster.config.JHipsterProperties;
-
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
 import java.util.stream.Collectors;
+
 import javax.annotation.PostConstruct;
 
+import org.baeldung.security.google2fa.CustomWebAuthenticationDetails;
+import org.jboss.aerogear.security.otp.Totp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +20,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
-import io.jsonwebtoken.*;
+import com.cryptominer.indonesia.repository.UserRepository;
+
+import io.github.jhipster.config.JHipsterProperties;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 
 @Component
 public class TokenProvider {
@@ -31,6 +45,9 @@ public class TokenProvider {
     private long tokenValidityInMillisecondsForRememberMe;
 
     private final JHipsterProperties jHipsterProperties;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public TokenProvider(JHipsterProperties jHipsterProperties) {
         this.jHipsterProperties = jHipsterProperties;
@@ -81,7 +98,30 @@ public class TokenProvider {
 
         User principal = new User(claims.getSubject(), "", authorities);
 
+        /*
+        final com.cryptominer.indonesia.domain.User user = userRepository.findOneByLogin(principal.getUsername()).get();
+        if ((user == null)) {
+            throw new BadCredentialsException("Invalid username or password");
+        }
+        // to verify verification code
+        if (user.isUsing2FA()) {
+            final String verificationCode = ((CustomWebAuthenticationDetails) auth.getDetails()).getVerificationCode();
+            final Totp totp = new Totp(user.getSecret());
+            if (!isValidLong(verificationCode) || !totp.verify(verificationCode)) {
+                throw new BadCredentialsException("Invalid verfication code");
+            }
+        }
+        */
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+    }
+    
+    private boolean isValidLong(String code) {
+        try {
+            Long.parseLong(code);
+        } catch (final NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 
     public boolean validateToken(String authToken) {

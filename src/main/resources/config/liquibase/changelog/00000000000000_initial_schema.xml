@@ -77,6 +77,16 @@
             <column name="usd_amount" type="decimal(10,2)">
                 <constraints nullable="true" />
             </column>
+            <column name="enabled" type="boolean" valueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+            
+       		<column name="is_using2fa" type="boolean" valueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+             <column name="secret" type="varchar(255)">
+               
+            </column>
             
         </createTable>
         <createIndex indexName="idx_user_login"
@@ -122,6 +132,8 @@
                   separator=";"
                   tableName="jhi_user">
             <column name="agreement" type="boolean"/>
+            <column name="enabled" type="boolean"/>
+            <column name="is_using2fa" type="boolean"/>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>

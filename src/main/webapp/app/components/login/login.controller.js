@@ -37,6 +37,7 @@
             Auth.login({
                 username: vm.username,
                 password: vm.password,
+                gauth: vm.gauth,
                 rememberMe: vm.rememberMe
             }).then(function () {
                 vm.authenticationError = false;

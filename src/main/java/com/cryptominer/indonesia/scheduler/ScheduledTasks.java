@@ -30,7 +30,6 @@ public class ScheduledTasks {
     	this.walletBtcTransactionRepository = walletBtcTransactionRepository;
 	}
     
-    @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() {
     	LocalDate now = LocalDate.now();
     	log.info("NOW {}", now.toString());

@@ -25,6 +25,7 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.validator.constraints.Email;
+import org.jboss.aerogear.security.otp.api.Base32;
 
 import com.cryptominer.indonesia.config.Constants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -151,8 +152,53 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name="usd_amount",nullable = false, precision=10, scale=2)
     private BigDecimal usdAmount;
     
+    @Column(nullable = false)
+    private boolean enabled;
     
-    public BigDecimal getBtcAmount() {
+    @Column(name="is_using2fa", nullable = false)
+    private boolean isUsing2FA;
+    
+    @Column(name="secret")
+    private String secret;
+    
+    public User() {
+		// TODO Auto-generated constructor stub
+    	super();
+    	this.secret = Base32.random();
+    	this.enabled = false;
+	}
+    
+    
+    public boolean isEnabled() {
+		return enabled;
+	}
+
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public boolean isUsing2FA() {
+		return isUsing2FA;
+	}
+
+
+	public void setUsing2FA(boolean isUsing2FA) {
+		this.isUsing2FA = isUsing2FA;
+	}
+
+
+	public String getSecret() {
+		return secret;
+	}
+
+
+	public void setSecret(String secret) {
+		this.secret = secret;
+	}
+
+
+	public BigDecimal getBtcAmount() {
 		return btcAmount;
 	}
 

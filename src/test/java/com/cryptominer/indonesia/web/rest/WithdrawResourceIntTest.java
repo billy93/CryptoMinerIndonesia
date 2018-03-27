@@ -73,7 +73,7 @@ public class WithdrawResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final WithdrawResource withdrawResource = new WithdrawResource(withdrawRepository, null, null);
+        final WithdrawResource withdrawResource = new WithdrawResource(withdrawRepository, null, null, null);
         this.restWithdrawMockMvc = MockMvcBuilders.standaloneSetup(withdrawResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

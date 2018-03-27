@@ -23,7 +23,8 @@
         vm.toggleNavbar = toggleNavbar;
         vm.collapseNavbar = collapseNavbar;
         vm.$state = $state;
-
+        vm.getAccount = getAccount;
+        
         getAccount();
 
         function getAccount() {
@@ -52,5 +53,7 @@
         function collapseNavbar() {
             vm.isNavbarCollapsed = true;
         }
+        
+        
     }
 })();
