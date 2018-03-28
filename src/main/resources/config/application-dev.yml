@@ -32,9 +32,9 @@ spring:
         serialization.indent_output: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:mysql://localhost:3306/CryptoMinerIndonesia?useUnicode=true&characterEncoding=utf8&useSSL=false
-        username: root
-        password:
+        url: jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/ad_372c60664a65375?user=b4ee3bbc7c0cac&password=baa8e56f
+        username: b4ee3bbc7c0cac
+        password: baa8e56f
         hikari:
             data-source-properties:
                 cachePrepStmts: true
@@ -54,7 +54,7 @@ spring:
         host: smtp.gmail.com
         port: 587
         username: billyfebram@gmail.com
-        password: InsideOutside93!
+        password: OutsideInside93!
         protocol: smtp
         tls: true
         properties.mail.smtp:
