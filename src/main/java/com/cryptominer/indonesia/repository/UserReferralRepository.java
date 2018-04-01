@@ -14,4 +14,6 @@ import com.cryptominer.indonesia.domain.UserReferral;
 @Repository
 public interface UserReferralRepository extends JpaRepository<UserReferral, Long> {
     List<UserReferral> findAllByUsername(String username);
+
+	UserReferral findByReferral(String referral);
 }

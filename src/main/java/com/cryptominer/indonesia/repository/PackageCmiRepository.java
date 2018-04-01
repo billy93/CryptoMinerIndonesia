@@ -21,4 +21,7 @@ public interface PackageCmiRepository extends JpaRepository<PackageCmi, Long>, J
 
 	List<PackageCmi> findByStartDateBeforeAndEndDateAfter(LocalDate now, LocalDate now2);
 
+	@Query(value="SELECT * FROM package_cmi where current_date() between start_date and end_date", nativeQuery=true)
+	List<PackageCmi> findAllByCurrentDateBetweenStartAndEndDate();
+
 }

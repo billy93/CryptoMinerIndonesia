@@ -17,6 +17,7 @@ import org.springframework.data.jpa.repository.*;
 @Repository
 public interface WalletBtcTransactionRepository extends JpaRepository<WalletBtcTransaction, Long>, JpaSpecificationExecutor<WalletBtcTransaction> {
 
-	WalletBtcTransaction findByCreatedDateAndPackageCmi(Instant instant, PackageCmi packageCmi);
+	@Query(value="SELECT * FROM wallet_btc_transaction where DATE(created_date) = ?1 and package_cmi_id = ?2", nativeQuery=true)
+	WalletBtcTransaction findByCreatedDateAndPackageCmi(String date, String cmiId);
 
 }

@@ -414,4 +414,32 @@ ui bootstrap tweaks
     width: 449px;
     height: 41px;
 }
+
+.step_image_wrapper {
+    position: relative;
+    height: 200px;
+    line-height: 200px;
+    text-align: center;
+}
+
+.step_badge {
+    background: #339900;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 300;
+    border-radius: 15px;
+    width: 30px;
+    height: 30px;
+    line-height: 29px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    margin-right: 3px;
+}
+
+.btn-transparent-orange, .btn-transparent-orange:active, .btn-transparent-orange:focus, .btn-transparent-orange:hover {
+    color: #e47d0b;
+    border-color: #e47d0b;
+    background: transparent;
+}
 /* jhipster-needle-css-add-main JHipster will add new css style */
