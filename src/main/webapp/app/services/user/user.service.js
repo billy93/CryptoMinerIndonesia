@@ -23,13 +23,17 @@
                 isArray: true
             },     
             'getReferral': {
-            		method: 'GET',
+            	method: 'GET',
                 url: 'api/users/referral/:username',
                 isArray: true
             },
             'gauth': {
             	url: 'api/users/gauth',
             	method: 'POST'
+            },
+            'getOtp': {
+            	url: 'api/users/getOtp',
+            	method: 'GET'
             },
             'save': { method:'POST' },
             'update': { method:'PUT' },

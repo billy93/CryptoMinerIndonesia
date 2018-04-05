@@ -31,10 +31,10 @@
             <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="amount" type="decimal(10,8)">
+            <column name="amount" type="decimal(65,8)">
                 <constraints nullable="true" />
             </column>
-			<column name="fee" type="decimal(10,8)">
+			<column name="fee" type="decimal(65,8)">
                 <constraints nullable="true" />
             </column>
             <column name="jhi_type" type="varchar(255)">

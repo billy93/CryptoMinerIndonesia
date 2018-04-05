@@ -149,7 +149,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Column(name="btc_amount",nullable = false, precision=10, scale=8)
     private BigDecimal btcAmount;
-    @Column(name="usd_amount",nullable = false, precision=10, scale=2)
+    @Column(name="usd_amount",nullable = false, precision=65, scale=2)
     private BigDecimal usdAmount;
     
     @Column(nullable = false)

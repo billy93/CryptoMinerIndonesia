@@ -56,6 +56,9 @@
             vm.settingsAccount = copyAccount(account);
         });
 
+        User.getOtp({}, function(result){
+        	vm.otp = result.code;
+        });
         function save () {
             Auth.updateAccount(vm.settingsAccount).then(function() {
                 vm.error = null;

@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.jboss.aerogear.security.otp.Totp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -65,6 +66,15 @@ public class WalletBtcTransactionResource {
         this.userRepository = userRepository;
     }
 
+    private boolean isValidLong(String code) {
+        try {
+            Long.parseLong(code);
+        } catch (final NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+    
     /**
      * POST  /wallet-btc-transactions : Create a new walletBtcTransaction.
      *
@@ -78,6 +88,14 @@ public class WalletBtcTransactionResource {
         log.debug("REST request to save WalletBtcTransaction : {}", walletBtcTransaction);
         if (walletBtcTransaction.getId() != null) {
             throw new BadRequestAlertException("A new walletBtcTransaction cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        if(user.isEnabled()) {
+	        final Totp totp = new Totp(user.getSecret());
+	        if (!isValidLong(walletBtcTransaction.getGauth()) || !totp.verify(walletBtcTransaction.getGauth())) {
+	            throw new BadRequestAlertException("Invalid verfication code", ENTITY_NAME, "invalidverificationcode");
+	        }
         }
         
         //sender

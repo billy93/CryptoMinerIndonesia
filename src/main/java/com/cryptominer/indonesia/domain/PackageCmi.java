@@ -1,12 +1,21 @@
 package com.cryptominer.indonesia.domain;
 
 
-import javax.persistence.*;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A PackageCmi.
@@ -33,6 +42,10 @@ public class PackageCmi extends AbstractAuditingEntity implements Serializable {
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @JsonProperty
+    @Transient
+    private String gauth;
+    
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -93,9 +106,19 @@ public class PackageCmi extends AbstractAuditingEntity implements Serializable {
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
+    
+    
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    @Override
+    public String getGauth() {
+		return gauth;
+	}
+
+	public void setGauth(String gauth) {
+		this.gauth = gauth;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -115,14 +138,11 @@ public class PackageCmi extends AbstractAuditingEntity implements Serializable {
         return Objects.hashCode(getId());
     }
 
-    @Override
-    public String toString() {
-        return "PackageCmi{" +
-            "id=" + getId() +
-            ", username='" + getUsername() + "'" +
-            ", amount=" + getAmount() +
-            ", startDate='" + getStartDate() + "'" +
-            ", endDate='" + getEndDate() + "'" +
-            "}";
-    }
+	@Override
+	public String toString() {
+		return "PackageCmi [id=" + id + ", username=" + username + ", amount=" + amount + ", startDate=" + startDate
+				+ ", endDate=" + endDate + ", gauth=" + gauth + "]";
+	}
+
+    
 }

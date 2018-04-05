@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
+import org.jboss.aerogear.security.otp.Totp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -61,6 +62,15 @@ public class WithdrawResource {
         this.walletBtcTransactionRepository = walletBtcTransactionRepository;
     }
 
+    private boolean isValidLong(String code) {
+        try {
+            Long.parseLong(code);
+        } catch (final NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+    
     /**
      * POST  /withdraws : Create a new withdraw.
      *
@@ -76,6 +86,13 @@ public class WithdrawResource {
             throw new BadRequestAlertException("A new withdraw cannot already have an ID", ENTITY_NAME, "idexists");
         }
         
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        if(user.isEnabled()) {
+	        final Totp totp = new Totp(user.getSecret());
+	        if (!isValidLong(withdraw.getGauth()) || !totp.verify(withdraw.getGauth())) {
+	            throw new BadRequestAlertException("Invalid verfication code", ENTITY_NAME, "invalidverificationcode");
+	        }
+        }
         //Withdraw (- current amount)
         User u = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
         
@@ -105,10 +122,10 @@ public class WithdrawResource {
 	        }
         }
         else if(withdraw.getType().contentEquals("USD")) {
-        		 BigDecimal totalAmount = withdraw.getAmount().add(new BigDecimal(withdraw.getAmount().intValue() * 5 / 100));
-        		 u.setUsdAmount(u.getUsdAmount().subtract(totalAmount)); //User -5%
+        	BigDecimal totalAmount = withdraw.getAmount().add(new BigDecimal(withdraw.getAmount().intValue() * 5 / 100));
+        	u.setUsdAmount(u.getUsdAmount().subtract(totalAmount)); //User -5%
         		
-        		 if(u.getUsdAmount().intValue() < 0) {
+        	if(u.getUsdAmount().intValue() < 0) {
          		throw new BadRequestAlertException("Insufficient Amount", ENTITY_NAME, "insufficient");
              }
              else {        

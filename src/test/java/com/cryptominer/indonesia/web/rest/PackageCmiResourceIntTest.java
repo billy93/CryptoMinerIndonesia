@@ -84,7 +84,7 @@ public class PackageCmiResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final PackageCmiResource packageCmiResource = new PackageCmiResource(packageCmiService, packageCmiQueryService);
+        final PackageCmiResource packageCmiResource = new PackageCmiResource(packageCmiService, packageCmiQueryService, null, null, null);
         this.restPackageCmiMockMvc = MockMvcBuilders.standaloneSetup(packageCmiResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

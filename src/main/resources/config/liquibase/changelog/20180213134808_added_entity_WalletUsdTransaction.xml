@@ -26,11 +26,11 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="amount" type="decimal(10,2)">
+            <column name="amount" type="decimal(65,2)">
                 <constraints nullable="true" />
             </column>
 
-			<column name="fee" type="decimal(10,2)">
+			<column name="fee" type="decimal(65,2)">
                 <constraints nullable="true" />
             </column>
             

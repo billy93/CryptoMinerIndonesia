@@ -74,7 +74,7 @@
             <column name="btc_amount" type="decimal(10,8)">
                 <constraints nullable="true" />
             </column>
-            <column name="usd_amount" type="decimal(10,2)">
+            <column name="usd_amount" type="decimal(65,2)">
                 <constraints nullable="true" />
             </column>
             <column name="enabled" type="boolean" valueBoolean="false">

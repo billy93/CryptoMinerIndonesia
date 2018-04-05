@@ -1,7 +1,9 @@
 package com.cryptominer.indonesia.web.rest;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +11,6 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.jboss.aerogear.security.otp.Totp;
-import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -344,6 +345,36 @@ public class UserResource {
         }*/
         
         return ResponseEntity.ok().build();
+    }
+    
+    public static String QR_PREFIX = "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=";
+    public static String APP_NAME = "CryptoMinerIndonesia";
+    
+    public String generateQRUrl(User user) throws UnsupportedEncodingException {
+        return QR_PREFIX + URLEncoder.encode(String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s", APP_NAME, user.getEmail(), user.getSecret(), APP_NAME), "UTF-8");
+    }
+    
+    /**
+     * GET /users : get all users.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and with body all users
+     */
+    @GetMapping("/users/getOtp")
+    @Timed
+    public ResponseEntity<Gauth> getOtp() {
+    	User u = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+    	Gauth gauth = new Gauth();
+    	
+    	String qrUrl = null;
+    	try {
+    		qrUrl = generateQRUrl(u);
+    		gauth.setCode(qrUrl);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return new ResponseEntity<>(gauth, HttpStatus.OK);
     }
     
     private boolean isValidLong(String code) {

@@ -97,13 +97,13 @@ public class PackageCmiResource {
             throw new BadRequestAlertException("A new packageCmi cannot already have an ID", ENTITY_NAME, "idexists");
         }
         
-//        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
-//        if(user.isEnabled()) {
-//	        final Totp totp = new Totp(user.getSecret());
-//	        if (!isValidLong(packageCmi.getGauth()) || !totp.verify(packageCmi.getGauth())) {
-//	            throw new BadCredentialsException("Invalid verfication code");
-//	        }
-//        }
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        if(user.isEnabled()) {
+	        final Totp totp = new Totp(user.getSecret());
+	        if (!isValidLong(packageCmi.getGauth()) || !totp.verify(packageCmi.getGauth())) {
+	            throw new BadRequestAlertException("Invalid verfication code", ENTITY_NAME, "invalidverificationcode");
+	        }
+        }
         
         PackageCmi result = packageCmiService.save(packageCmi);
         

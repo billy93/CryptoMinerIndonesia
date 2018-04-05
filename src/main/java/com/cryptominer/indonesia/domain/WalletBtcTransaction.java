@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 import com.cryptominer.indonesia.domain.enumeration.TransactionType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A WalletBtcTransaction.
@@ -27,7 +28,7 @@ public class WalletBtcTransaction extends AbstractAuditingEntity  implements Ser
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "amount", precision=10, scale=8)
+    @Column(name = "amount", precision=65, scale=8)
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
@@ -49,11 +50,15 @@ public class WalletBtcTransaction extends AbstractAuditingEntity  implements Ser
     @Column(name = "description")
     private String description;
     
-    @Column(name = "fee", precision=10, scale=8)
+    @Column(name = "fee", precision=65, scale=8)
     private BigDecimal fee;
 
     @ManyToOne
     private PackageCmi packageCmi;
+    
+    @JsonProperty
+    @Transient
+    private String gauth;
     
     public PackageCmi getPackageCmi() {
 		return packageCmi;
@@ -169,6 +174,15 @@ public class WalletBtcTransaction extends AbstractAuditingEntity  implements Ser
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	
+	public String getGauth() {
+		return gauth;
+	}
+
+	public void setGauth(String gauth) {
+		this.gauth = gauth;
 	}
 
 	@Override

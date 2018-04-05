@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 import com.cryptominer.indonesia.domain.enumeration.TransactionType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A WalletUsdTransaction.
@@ -27,10 +28,10 @@ public class WalletUsdTransaction extends AbstractAuditingEntity implements Seri
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "amount", precision=10, scale=2)
+    @Column(name = "amount", precision=65)
     private BigDecimal amount;
 
-    @Column(name = "fee", precision=10, scale=2)
+    @Column(name = "fee", precision=65)
     private BigDecimal fee;
 
     @Enumerated(EnumType.STRING)
@@ -49,6 +50,10 @@ public class WalletUsdTransaction extends AbstractAuditingEntity implements Seri
     @Column(name = "status")
     private String status;
 
+    @JsonProperty
+    @Transient
+    private String gauth;
+    
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -152,7 +157,15 @@ public class WalletUsdTransaction extends AbstractAuditingEntity implements Seri
     
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    public BigDecimal getFee() {
+    public String getGauth() {
+		return gauth;
+	}
+
+	public void setGauth(String gauth) {
+		this.gauth = gauth;
+	}
+
+	public BigDecimal getFee() {
 		return fee;
 	}
 

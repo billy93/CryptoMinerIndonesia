@@ -15,6 +15,8 @@ import com.cryptominer.indonesia.service.WalletUsdTransactionQueryService;
 
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.web.util.ResponseUtil;
+
+import org.jboss.aerogear.security.otp.Totp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -56,6 +58,15 @@ public class WalletUsdTransactionResource {
         this.userRepository = userRepository;
     }
 
+    private boolean isValidLong(String code) {
+        try {
+            Long.parseLong(code);
+        } catch (final NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+    
     /**
      * POST  /wallet-usd-transactions : Create a new walletUsdTransaction.
      *
@@ -69,6 +80,14 @@ public class WalletUsdTransactionResource {
         log.debug("REST request to save WalletUsdTransaction : {}", walletUsdTransaction);
         if (walletUsdTransaction.getId() != null) {
             throw new BadRequestAlertException("A new walletUsdTransaction cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        if(user.isEnabled()) {
+	        final Totp totp = new Totp(user.getSecret());
+	        if (!isValidLong(walletUsdTransaction.getGauth()) || !totp.verify(walletUsdTransaction.getGauth())) {
+	            throw new BadRequestAlertException("Invalid verfication code", ENTITY_NAME, "invalidverificationcode");
+	        }
         }
         
         //sender
@@ -100,6 +119,14 @@ public class WalletUsdTransactionResource {
         log.debug("REST request to save WalletUsdTransaction : {}", walletUsdTransaction);
         if (walletUsdTransaction.getId() != null) {
             throw new BadRequestAlertException("A new walletUsdTransaction cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        if(user.isEnabled()) {
+	        final Totp totp = new Totp(user.getSecret());
+	        if (!isValidLong(walletUsdTransaction.getGauth()) || !totp.verify(walletUsdTransaction.getGauth())) {
+	            throw new BadRequestAlertException("Invalid verfication code", ENTITY_NAME, "invalidverificationcode");
+	        }
         }
         
         BigDecimal totalTransfer = walletUsdTransaction.getAmount().add(new BigDecimal(walletUsdTransaction.getAmount().intValue() * 5 / 100));

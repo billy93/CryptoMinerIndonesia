@@ -3,6 +3,8 @@ package com.cryptominer.indonesia.domain;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -23,13 +25,13 @@ public class Withdraw implements Serializable {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "amount", precision=10, scale=8)
+    @Column(name = "amount", precision=65, scale=8)
     private BigDecimal amount;
 
     @Column(name = "status")
     private String status;
 
-    @Column(name = "fee", precision=10, scale=8)
+    @Column(name = "fee", precision=65, scale=8)
     private BigDecimal fee;
 
     @Column(name = "type")
@@ -43,6 +45,9 @@ public class Withdraw implements Serializable {
     @JoinColumn(unique = true)
     private WalletBtcTransaction walletBtcTransaction;
 
+    @JsonProperty
+    @Transient
+    private String gauth;
     
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -121,7 +126,15 @@ public class Withdraw implements Serializable {
     
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    public String getType() {
+    public String getGauth() {
+		return gauth;
+	}
+
+	public void setGauth(String gauth) {
+		this.gauth = gauth;
+	}
+
+	public String getType() {
 		return type;
 	}
 
