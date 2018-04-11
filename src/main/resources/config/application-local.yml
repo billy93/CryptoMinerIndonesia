@@ -51,16 +51,16 @@ spring:
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
     mail:
-        host: smtp.gmail.com
-        port: 587
-        username: billyfebram@gmail.com
-        password: InsideOutside93!
+        host: smtp.zoho.com
+        port: 465
+        username: admin@cryptominerindonesia.com
+        password: insideoutside
         protocol: smtp
         tls: true
         properties.mail.smtp:
             auth: true
             starttls.enable: true
-            ssl.trust: smtp.gmail.com
+            ssl.trust: smtp.zoho.com
     messages:
         cache-seconds: 1
     thymeleaf:
